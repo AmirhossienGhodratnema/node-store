@@ -6,6 +6,7 @@ const { route: ApiRoute } = require('./router/api/router');
 const { errorHandler, notFoundError } = require('./errors/errorHandlers');
 const { AllRoutesApi } = require('./router/api/router');
 const { AllRoutesWeb } = require('./router/web/router');
+const morgan = require('morgan');
 
 module.exports = class Application {
 
@@ -25,6 +26,7 @@ module.exports = class Application {
         const path = require('path');
 
         // Opitons config.
+        this.#app.use(morgan('dev'));    // Loger
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
         this.#app.use(this.#express.static(path.join(__dirname, './public')));    // Set static files.
@@ -46,6 +48,21 @@ module.exports = class Application {
     configDatabase(DB_URL) {
         const { mongoose } = require('mongoose');
         mongoose.connect(DB_URL, console.log(`Connect db successfull to: ${process.env.DB_CONNECT}...`));    // Connect to mongodb.
+
+        // Connection alert
+        mongoose.connection.on('connected', () => {
+            console.log('Mongoose connected to DB')
+        });
+
+        // Disconneted alert
+        mongoose.connection.on('disconnected', () => {
+            console.log('Mongoose connection desconnected');
+        });
+
+        process.on('SIGINT', async () => {
+            await mongoose.connection.close();    // Close connectin to DB
+            process.exit(0);    // Close connection to DB
+        })
     };
 
     // Create route to web and api.
