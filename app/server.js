@@ -1,6 +1,5 @@
 const cookieParser = require('cookie-parser');
 
-
 // My require
 const { route: ApiRoute } = require('./router/api/router');
 const { errorHandler, notFoundError } = require('./errors/errorHandlers');
@@ -69,14 +68,12 @@ module.exports = class Application {
     createRoute() {
         this.#app.use(AllRoutesApi);    // Set api route.
         this.#app.use(AllRoutesWeb);    // Set api route.
-
     };
 
     // Error handler full.
     errorHandler() {
         this.#app.use(notFoundError)    // Not found error (404) handler.
         this.#app.use(errorHandler)    // Errorhandler all errors.
-
     };
 }
 

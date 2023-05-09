@@ -5,7 +5,10 @@ const router = require('express').Router();
 const HomeController = require('../../controller/api/homeController/homeContrtoller')
 
 
-router.get('/', HomeController.indexPage);    // Home page controller
+// Validation
+const { registerValidation } = require('./../../validation/validation')
+
+router.post('/', registerValidation(), HomeController.indexPage);    // Home page controller
 
 module.exports = {
     homeRoute: router
