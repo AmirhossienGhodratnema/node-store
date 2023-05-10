@@ -4,11 +4,13 @@ const router = require('express').Router();
 // Controller
 const HomeController = require('../../controller/api/homeController/homeContrtoller')
 
+// Routers
+const { userRouters } = require('./user/userRoute');
+const { indexPage } = require('./indexPage/indexPage');
 
-// Validation
-const { registerValidation } = require('./../../validation/validation')
+router.use('/', indexPage)
+router.use('/user', userRouters)
 
-router.post('/', registerValidation(), HomeController.indexPage);    // Home page controller
 
 module.exports = {
     homeRoute: router

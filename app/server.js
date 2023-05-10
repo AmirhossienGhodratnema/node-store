@@ -6,7 +6,8 @@ const { errorHandler, notFoundError } = require('./errors/errorHandlers');
 const { AllRoutesApi } = require('./router/api/router');
 const { AllRoutesWeb } = require('./router/web/router');
 const morgan = require('morgan');
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
 module.exports = class Application {
 
     #express = require('express');    // Require express private.
@@ -34,7 +35,31 @@ module.exports = class Application {
         // View engine config. 
         this.#app.set('view engine', 'ejs');    // Set view engine,
         this.#app.set('views', path.join(__dirname, 'views'));    // Set dir view file.
+
+        this.#app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
+            definition: {
+                openapi: '3.0.0',
+                info: {
+                    title: 'Hello World',
+                    version: '1.0.0',
+                    description: 'Create api supported in new node store project',
+                    contact:
+                    {
+                        name: 'Amirhossein Ghodratnema',
+                        url: 'Amirhosseinghodratnema.ir',
+                        email: 'Amirhosseinghodratnema@gmail.com'
+                    }
+                },
+                servers: [
+                    { url: 'http://localhost:8000' }
+                ]
+
+            },
+            apis: [path.join(__dirname, 'router', '**', '*.js')],
+        })));
     };
+
+
 
     // Create server
     createServer(PORT) {
@@ -67,7 +92,7 @@ module.exports = class Application {
     // Create route to web and api.
     createRoute() {
         this.#app.use(AllRoutesApi);    // Set api route.
-        this.#app.use(AllRoutesWeb);    // Set api route.
+        // this.#app.use(AllRoutesWeb);    // Set api route.
     };
 
     // Error handler full.
