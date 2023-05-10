@@ -5,8 +5,9 @@ const { homeRoute } = require('./index');
 
 
 
+route.use('/api/v1', homeRoute);
 
-route.use('/api', homeRoute);
+
 
 
 
