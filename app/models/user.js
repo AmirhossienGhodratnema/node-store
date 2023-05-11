@@ -10,7 +10,7 @@ const Schema = new mongoose.Schema({
     otp: {
         type: Object, default: {
             code: 0,
-            expires: 0
+            expireIn: 0
         }
     },
     bills: { type: [], default: [] },

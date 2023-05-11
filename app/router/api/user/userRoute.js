@@ -1,5 +1,12 @@
 const router = require('express').Router();
 
+// Controller
+const AuthController = require('./../../../controller/api/user/authController')
+
+
+// Validation
+const getOtpValidation = require('./../../../validation/authValidation');
+
 /**
  * @swagger
  * tags:
@@ -9,16 +16,16 @@ const router = require('express').Router();
 
 /**
  * @swagger
- * /api/v1/user/login:
+ * /api/v1/user/getOtp:
  *   post:
  *     summery: Loing user in userpanel with phone number
  *     tags: [User autorization] 
  *     description: One time password(otp) login
  *     parameters:
- *     -    name: Mobile
+ *     -    name: phone
  *          description: fa-IRI phonenumber
  *          in: formData
- *          required: True
+ *          required: true
  *          type: String
  *          
  *     responses:
@@ -33,9 +40,8 @@ const router = require('express').Router();
  */
 
 
-router.post('/login', (req, res, next) => {
-    return res.json('Login')
-})
+router.post('/get-otp', getOtpValidation.getOtpValidation(), AuthController.getOtp);
+router.post('/check-otp', getOtpValidation.checkOtpValidation(), AuthController.checkOtp);
 
 
 

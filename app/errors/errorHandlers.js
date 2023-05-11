@@ -16,10 +16,9 @@ const notFoundError = (req, res, next) => {
 // All errors
 const errorHandler = (err, req, res, next) => {
     const serverError = createErrors.InternalServerError(); ///Get server error
-    const status = err.statusCode || serverError.status;
+    const status = err.status || serverError.status;
     const message = err.message || serverError.message;
     return res.status(status).json({
-        data: null,
         errors: {
             status,
             message
