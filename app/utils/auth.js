@@ -1,5 +1,6 @@
 const { User } = require('./../models/user');
 const { sign } = require('jsonwebtoken');
+const { redisClient } = require('./init_redis');
 
 // -------------------- *** -------------------- 
 
@@ -50,10 +51,35 @@ async function updateUser(phone, objectData = {}) {
 
 // -------------------- *** -------------------- 
 
-async function createToken(phone) {
-    let token = sign({ phone }, process.env.JSON_WEBTOKEN_SECURECODE, { expiresIn: '365d' });
-    return token;
+async function signToken(userId) {
+    return new Promise(async (resolve, reject) => {
+        const user = await User.findById(userId);
+        if (!user) reject({ status: 400, message: 'There is no user' })
+        const { phone } = user;
+        let token = await sign({ phone }, process.env.JSON_WEBTOKEN_SECURECODE, { expiresIn: '60d' });
+        resolve(token);
+    })
+
 }
+
+
+async function signRefreshToken(userId) {
+    return new Promise(async (resolve, reject) => {
+        const user = await User.findById(userId);
+        if (!user) reject({ status: 400, message: 'There is no user' })
+        const { phone } = user;
+        let token = await sign({ phone }, process.env.JSON_WEBTOKEN_SECURECODE, { expiresIn: '365d' });
+        console.log(user.id)
+        await redisClient.setEx(user.id, 31536000, token);
+        resolve(token);
+    });
+}
+
+// async function signRefreshToken(phone) {
+//     let token = sign({ phone }, process.env.REFRESH_WEBTOKEN_SECURECODE, { expiresIn: '365d' });
+//     return token;
+// }
+
 
 // -------------------- *** -------------------- 
 
@@ -68,5 +94,6 @@ async function createToken(phone) {
 module.exports = {
     randomNumber,
     saveUser,
-    createToken,
+    signToken,
+    signRefreshToken
 };

@@ -8,7 +8,9 @@ const { AllRoutesWeb } = require('./router/web/router');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
-const cors = require('cors')
+const cors = require('cors');
+const { redisClient } = require('./utils/init_redis');
+const colors = require('colors');
 
 module.exports = class Application {
 
@@ -16,11 +18,14 @@ module.exports = class Application {
     #app = this.#express();    // Get app in express and private.
 
     constructor(PORT, DB_URL) {
+        console.log('--- The server is starting up ---'.yellow.bold.italic);
         this.configDatabase(DB_URL);    // Configuration DB.
+        this.innitRedis()
         this.confiApplication();    // Configuration application.
         this.createServer(PORT);    // Create server.
         this.createRoute();    // Create routes
         this.errorHandler();    // Error handlers.
+
     };
 
     //  Server configuration
@@ -34,7 +39,6 @@ module.exports = class Application {
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
         this.#app.use(this.#express.static(path.join(__dirname, './public')));    // Set static files.
         this.#app.use(cookieParser(process.env.SECRET_KEY_COOKIE_PARSER));    // Set cookie-parser and secret-key. 
-
         // View engine config. 
         this.#app.set('view engine', 'ejs');    // Set view engine,
         this.#app.set('views', path.join(__dirname, 'views'));    // Set dir view file.
@@ -68,22 +72,24 @@ module.exports = class Application {
     createServer(PORT) {
         const http = require('http');
         const server = http.createServer(this.#app);    // Create server.
-        server.listen(PORT, console.log(`Running server on port ${PORT}...`))    // Runnin server.
+        server.listen(PORT, console.log(`Server: Running server on port ${PORT}...`.cyan.bold.italic))    // Runnin server.
     };
 
     // Connect to DB.
     configDatabase(DB_URL) {
         const { mongoose } = require('mongoose');
-        mongoose.connect(DB_URL, console.log(`Connect db successfull to: ${process.env.DB_CONNECT}...`));    // Connect to mongodb.
+        mongoose.connect(DB_URL, console.log(`MongoDB: Connecting MongoDB: ${process.env.DB_CONNECT}...`.black.bold.italic));    // Connect to mongodb.
 
         // Connection alert
         mongoose.connection.on('connected', () => {
-            console.log('Mongoose connected to DB')
-        });
+            console.log('MongoDB: Mongoose connected to DB'.black.bold.italic)
+            console.log('-------- Server start up --------'.blue.bold.italic);
+            console.log()
+         });
 
         // Disconneted alert
         mongoose.connection.on('disconnected', () => {
-            console.log('Mongoose connection desconnected');
+            console.log('MongoDB: Mongoose connection desconnected'.black.bold.bold.italic);
         });
 
         process.on('SIGINT', async () => {
@@ -103,6 +109,10 @@ module.exports = class Application {
         this.#app.use(notFoundError)    // Not found error (404) handler.
         this.#app.use(errorHandler)    // Errorhandler all errors.
     };
-}
+
+    innitRedis() {
+        require('./utils/init_redis');
+    };
+};
 
 

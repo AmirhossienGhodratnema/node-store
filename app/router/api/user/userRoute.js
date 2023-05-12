@@ -42,6 +42,7 @@ const getOtpValidation = require('./../../../validation/authValidation');
 
 router.post('/get-otp', getOtpValidation.getOtpValidation(), AuthController.getOtp);
 router.post('/check-otp', getOtpValidation.checkOtpValidation(), AuthController.checkOtp);
+router.post('/refresh-token', AuthController.refreshToken);
 
 
 
