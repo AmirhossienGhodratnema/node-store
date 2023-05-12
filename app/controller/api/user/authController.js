@@ -1,5 +1,5 @@
 const { User } = require("../../../models/user");
-const { randomNumber, saveUser } = require("../../../utils/auth");
+const { randomNumber, saveUser, createToken } = require("../../../utils/auth");
 const Controller = require("../../controller");
 
 
@@ -33,13 +33,11 @@ module.exports = new class AuthController extends Controller {
             if (checkingBody) throw { status: 403, message: checkingBody };
             const user = await User.findOne({ phone });
             if (!user) throw { status: 400, message: 'There is no such user' };
-
-
-
             if (user.otp.code != code) throw { status: 400, message: 'The one-time password is incorrect' };
             const date = new Date().getTime()
-            if(user.otp.expireIn < date) throw {status : 400 , message : 'The one-time code has expired'}
-            return res.json(user)
+            if (user.otp.expireIn < date) throw { status: 400, message: 'The one-time code has expired' }
+            const token = await createToken(user.phone);
+            return res.json(token);
         } catch (error) {
             next(error);
         };

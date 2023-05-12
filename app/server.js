@@ -8,7 +8,7 @@ const { AllRoutesWeb } = require('./router/web/router');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
-
+const cors = require('cors')
 
 module.exports = class Application {
 
@@ -28,6 +28,7 @@ module.exports = class Application {
         const path = require('path');
 
         // Opitons config.
+        this.#app.use(cors());
         this.#app.use(morgan('dev'));    // Loger
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.

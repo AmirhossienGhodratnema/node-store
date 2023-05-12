@@ -1,4 +1,5 @@
 const { User } = require('./../models/user');
+const { sign } = require('jsonwebtoken');
 
 // -------------------- *** -------------------- 
 
@@ -10,8 +11,8 @@ async function randomNumber() {
 // -------------------- *** -------------------- 
 
 async function saveUser(phone, code) {
-    const dateEXP =  new Date().getTime() + 120000;
-    console.log(dateEXP , new Date().getTime())
+    const dateEXP = new Date().getTime() + 120000;
+    console.log(dateEXP, new Date().getTime())
     let otp = {    // Create otp for user
         code,
         expireIn: dateEXP
@@ -49,8 +50,23 @@ async function updateUser(phone, objectData = {}) {
 
 // -------------------- *** -------------------- 
 
+async function createToken(phone) {
+    let token = sign({ phone }, process.env.JSON_WEBTOKEN_SECURECODE, { expiresIn: '365d' });
+    return token;
+}
+
+// -------------------- *** -------------------- 
+
+// -------------------- *** -------------------- 
+// -------------------- *** -------------------- 
+// -------------------- *** -------------------- 
+// -------------------- *** -------------------- 
+
+
+
 
 module.exports = {
     randomNumber,
     saveUser,
+    createToken,
 };

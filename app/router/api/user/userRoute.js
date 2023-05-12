@@ -16,17 +16,17 @@ const getOtpValidation = require('./../../../validation/authValidation');
 
 /**
  * @swagger
- * /api/v1/user/getOtp:
+ * /api/v1/user/get-otp:
  *   post:
  *     summery: Loing user in userpanel with phone number
  *     tags: [User autorization] 
  *     description: One time password(otp) login
  *     parameters:
- *     -    name: phone
- *          description: fa-IRI phonenumber
- *          in: formData
- *          required: true
- *          type: String
+ *          -   name: phone
+ *              description: fa-IRI phonenumber
+ *              in: formData
+ *              required: true
+ *              type: String    
  *          
  *     responses:
  *       201:
