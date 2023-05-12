@@ -6,11 +6,14 @@ const HomeController = require('../../controller/api/homeController/homeContrtol
 
 // Routers
 const { userRouters } = require('./user/userRoute');
+const { developerRoute } = require('./developer');
+
 const { indexPage } = require('./indexPage/indexPage');
 const { verifyToken } = require('../../middleware/verifytoken');
 
 router.use('/', indexPage);
 router.use('/user', userRouters);
+router.use('/developer', developerRoute);
 
 router.use('/test', verifyToken, (req, res, next) => {
     return res.json('Token is ok');
