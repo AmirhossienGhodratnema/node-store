@@ -11,6 +11,7 @@ router.post('/create', create(), CategoryController.create);
 router.post('/get-all-parents', CategoryController.getAllParents);
 router.post('/get-child/:id', CategoryController.getChild);
 router.get('/all', CategoryController.getAllCategory);
+router.delete('/remove-one/:id', CategoryController.removeOne);
 
 
 

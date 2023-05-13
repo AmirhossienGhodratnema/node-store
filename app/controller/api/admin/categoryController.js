@@ -9,7 +9,11 @@ module.exports = new class CategoryController extends Controller {
             const checkingBody = await this.validationData(req);
             if (checkingBody) throw { status: 400, message: checkingBody };
             const category = await Category.create({ title, parent });
-            return res.json('Category');
+            return res.json({
+                status: 200,
+                success: true,
+                message: 'Category created successfully'
+            });
         } catch (error) {
             next(error);
         };
@@ -69,4 +73,33 @@ module.exports = new class CategoryController extends Controller {
             next(error);
         };
     };
+
+
+    async removeOne(req, res, next) {
+        try {
+            const { id } = req.params;
+            const check = await this.checkExistItem(id);
+            console.log(check)
+
+            const deleteCategory = await Category.deleteOne({ '_id': id });
+            if (deleteCategory.deletedCount == 0) throw { status: 400, message: 'The delete operation failed' };
+            return res.json({
+                status: 200,
+                success: true,
+                message: 'The deletion was successful'
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+
+    // --------------------- Tools ---------------------
+
+    async checkExistItem(id) {
+        const result = await Category.findOne({ '_id': id });
+        if (!result) throw { status: 400, message: 'There is no such category' }
+        return !!result
+    };
+
 };
