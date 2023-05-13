@@ -27,4 +27,20 @@ module.exports = new class CategoryController extends Controller {
             next(error);
         };
     };
+
+
+    async getChild(req, res, next) {
+        try {
+            const { id } = req.params;
+            const category = await Category.find({ parent: id });
+            if (!category) throw { status: 400, message: 'This category has no children' };
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                category
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
 };
