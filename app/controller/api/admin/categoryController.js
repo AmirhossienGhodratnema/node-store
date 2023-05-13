@@ -43,4 +43,30 @@ module.exports = new class CategoryController extends Controller {
             next(error);
         };
     };
+
+
+    async getAllCategory(req, res, next) {
+        try {
+            const category = await Category.aggregate([
+                {
+                    $lookup: {
+                        from: 'categories',
+                        localField: '_id',
+                        foreignField: 'parent',
+                        as: 'child'
+                    },
+                },
+                {
+                    $project: {
+                        __v: 0,
+                        'child.__v': 0,
+                        'child.parent': 0
+                    }
+                },
+            ]);
+            return res.status(200).json(category);
+        } catch (error) {
+            next(error);
+        };
+    };
 };
