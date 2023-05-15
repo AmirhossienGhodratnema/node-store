@@ -51,12 +51,32 @@ module.exports = new class CategoryController extends Controller {
 
     async getAllCategory(req, res, next) {
         try {
+            // const category = await Category.aggregate([
+            //     {
+            //         $lookup: {
+            //             from: 'categories',
+            //             localField: '_id',
+            //             foreignField: 'parent',
+            //             as: 'child'
+            //         },
+            //     },
+            //     {
+            //         $project: {
+            //             __v: 0,
+            //             'child.__v': 0,
+            //             'child.parent': 0
+            //         }
+            //     },
+            // ]);
             const category = await Category.aggregate([
                 {
-                    $lookup: {
+                    $graphLookup: {
                         from: 'categories',
-                        localField: '_id',
-                        foreignField: 'parent',
+                        startWith: '$_id',
+                        connectFromField: '_id',
+                        connectToField: 'parent',
+                        maxDepth: 5,
+                        depthField: 'depth',
                         as: 'child'
                     },
                 },
@@ -75,13 +95,44 @@ module.exports = new class CategoryController extends Controller {
     };
 
 
+    // async getAllCategoryPOPInMethod(req, res, next) {    // Getting data in the form of populit in the controller
+    //     try {
+    //         const categories = await Category.find({}, { '_id': 0, '__v': 0, 'id': 0 }).populate({
+    //             path: 'parent',
+    //             select: { '_id': 0, '__v': 0, 'id': 0 },
+    //             populate: [
+    //                 {
+    //                     path: 'parent',
+    //                     select: { '_id': 0, '__v': 0, 'id': 0 }
+    //                 }
+    //             ]
+    //         });
+    //         return res.status(200).json(categories);
+    //     } catch (error) {
+    //         next(error);
+    //     };
+    // };
+
+    async getAllPre(req, res, next) {
+        try {
+            const categories = await Category.find({});
+            return res.status(200).json({ categories });
+        } catch (error) {
+            next(error);
+        };
+    };
+
     async removeOne(req, res, next) {
         try {
             const { id } = req.params;
             const check = await this.checkExistItem(id);
-            console.log(check)
 
-            const deleteCategory = await Category.deleteOne({ '_id': id });
+            const deleteCategory = await Category.deleteMany({
+                $or: [
+                    { _id: check._id },
+                    { parent: check._id },
+                ]
+            });
             if (deleteCategory.deletedCount == 0) throw { status: 400, message: 'The delete operation failed' };
             return res.json({
                 status: 200,
@@ -99,7 +150,7 @@ module.exports = new class CategoryController extends Controller {
     async checkExistItem(id) {
         const result = await Category.findOne({ '_id': id });
         if (!result) throw { status: 400, message: 'There is no such category' }
-        return !!result
+        return result
     };
 
 };

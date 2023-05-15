@@ -9,9 +9,12 @@ const { create } = require('./../../../../validation/admin/categoryValidation')
 
 router.post('/create', create(), CategoryController.create);
 router.post('/get-all-parents', CategoryController.getAllParents);
-router.post('/get-child/:id', CategoryController.getChild);
 router.get('/all', CategoryController.getAllCategory);
+// router.get('/all-populate', CategoryController.getAllCategoryPOPInMethod);
+router.get('/all-pre', CategoryController.getAllPre);
 router.delete('/remove-one/:id', CategoryController.removeOne);
+router.post('/get-child/:id', CategoryController.getChild);
+
 
 
 
