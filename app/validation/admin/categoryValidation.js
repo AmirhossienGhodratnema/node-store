@@ -10,4 +10,12 @@ const create = () => {
     ]
 };
 
-module.exports = { create };
+const edit = () => {
+    return [
+        check('title')
+            .isLength({ min: 3, max: 11 }).withMessage('Between 3 and 11 characters'),
+    ]
+};
+
+
+module.exports = { create, edit };

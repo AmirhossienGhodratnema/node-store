@@ -144,7 +144,23 @@ module.exports = new class CategoryController extends Controller {
         };
     };
 
-
+    async edit(req, res, next) {    // Update categories (title)
+        try {
+            const { id, title } = req.body;
+            const checkingBody = await this.validationData(req);
+            if (checkingBody) throw { status: 400, message: checkingBody };
+            const category = await this.checkExistItem(id);
+            const editData = await Category.updateOne({ '_id': id }, { $set: { title: title } })
+            if (editData.modifiedCount == 0) throw { status: 400, message: 'The update was not done (it is duplicate)' }
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: 'The changes were made successfully'
+            })ک
+        } catch (error) {
+            next(error);
+        };
+    };
     // --------------------- Tools ---------------------
 
     async checkExistItem(id) {
