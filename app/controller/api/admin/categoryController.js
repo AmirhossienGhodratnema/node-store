@@ -156,7 +156,7 @@ module.exports = new class CategoryController extends Controller {
                 status: 200,
                 success: true,
                 message: 'The changes were made successfully'
-            })ک
+            });
         } catch (error) {
             next(error);
         };
