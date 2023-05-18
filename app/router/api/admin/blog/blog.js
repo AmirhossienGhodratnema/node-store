@@ -1,5 +1,4 @@
 
-
 const router = require('express').Router();
 
 
@@ -7,7 +6,7 @@ const router = require('express').Router();
 const BlogController = require('./../../../../controller/api/admin/blogController')
 
 
-router.get('/', );
+router.get('/create', BlogController.create);
 
 
 module.exports = {
