@@ -4,8 +4,9 @@ const CommentSchema = new mongoose.Schema({
     user: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     comment: { type: String, require: true },
     parent: { type: mongoose.Types.ObjectId },
-    createdAt: { type: Date, default: new Date().now() }
+    createdAt: { type: Date, default: new Date().getTime() }
 })
+
 
 const Schema = new mongoose.Schema({
     author: { type: mongoose.Types.ObjectId, require: true },

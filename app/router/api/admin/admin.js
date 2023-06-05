@@ -8,6 +8,8 @@ const { blog } = require('./blog/blog');
 router.use('/category', category);
 router.use('/blog', blog);
 
+
+
 router.get('/', (req, res, next) => {
     return res.json('Admin');
 });
