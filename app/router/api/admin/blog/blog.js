@@ -13,7 +13,7 @@ const { create } = require('./../../../../validation/admin/blogValidation')
 
 router.post('/create', uploadFile.single('image'), create(), BlogController.create);
 router.get('/getAllBlogs', BlogController.getAllBlogs)
-
+router.get('/:id', BlogController.getBlogId)
 module.exports = {
     blog: router
 }

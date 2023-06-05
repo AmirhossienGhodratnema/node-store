@@ -67,7 +67,6 @@ module.exports = new class BlogController extends Controller {
                         as: 'category'
                     }
                 },
-
                 {
                     $project: {    // Do not display these values to the category.
                         'category._id': 0,
@@ -83,5 +82,44 @@ module.exports = new class BlogController extends Controller {
         } catch (error) {
             next(error);
         };
+    };
+
+
+    async getBlogId(req, res, next) {
+        try {
+            const result = await this.findBlog(req.params);
+
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                result
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+
+
+    async findBlog(query = {}) {    // Find one blog.
+        const { id } = query;    // Getting the query from the paramet.
+        const blog = await Blog.findOne({ _id: id }).populate([
+            {
+                path: 'author',
+                select: {
+                    '_id': 0,
+                    'otp': 0,
+                    'bills': 0,
+                    'rols': 0,
+                    '__v': 0,
+                    'disCount': 0,
+                }
+            },
+            {
+                path: 'category',
+            }
+        ]);    // Get blog
+        if (!blog) throw { status: 400, message: 'There is no blog' };    // Blog error
+        return blog    // Return blog
     };
 };
