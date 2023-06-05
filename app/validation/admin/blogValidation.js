@@ -22,7 +22,6 @@ const create = () => {
         check('filename')
             .custom(async (value, { req }) => {
                 if (!req.body.filename) {
-                    console.log('req.body in blogValidation', req.body)
                     throw new Error('image is not define');
                 }
             })

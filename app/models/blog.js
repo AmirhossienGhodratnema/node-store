@@ -20,7 +20,7 @@ const Schema = new mongoose.Schema({
     like: { type: [mongoose.Types.ObjectId], ref: 'users', default: [] },
     disLike: { type: [mongoose.Types.ObjectId], ref: 'users', default: [] },
     bookMark: { type: [mongoose.Types.ObjectId], ref: 'users', default: [] },
-}, { timestamps: true, versionKey: false });
+}, { timestamps: true, versionKey: false, toJSON: { virtuals: true, versionKey: false } });
 
 
 module.exports = {

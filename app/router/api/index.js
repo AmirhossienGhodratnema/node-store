@@ -14,7 +14,7 @@ const { verifyToken } = require('../../middleware/verifytoken');
 
 router.use('/', indexPage);
 router.use('/user', userRouters);
-router.use('/admin', AdminRouter);
+router.use('/admin', verifyToken, AdminRouter);
 
 
 
