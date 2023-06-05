@@ -87,12 +87,11 @@ module.exports = new class BlogController extends Controller {
 
     async getBlogId(req, res, next) {
         try {
-            const result = await this.findBlog(req.params);
-
+            const blog = await this.findBlog(req.params);    // Get blog.
             return res.status(200).json({
                 status: 200,
                 success: true,
-                result
+                blog
             })
         } catch (error) {
             next(error);
@@ -100,9 +99,28 @@ module.exports = new class BlogController extends Controller {
     };
 
 
+    async remove(req, res, next) {
+        try {
+            const { id } = req.params;
+            await this.findBlog(req.params);
+            const remove = await Blog.deleteOne({ _id: id });
+            if (remove.deletedCount == 0) {
+                throw { status: 400, message: 'The delete operation failed' };
+            };
+            return res.json({
+                status: 200,
+                success: true,
+                message: 'Blog is deleted'
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
+
 
     async findBlog(query = {}) {    // Find one blog.
         const { id } = query;    // Getting the query from the paramet.
+        console.log('id', id)
         const blog = await Blog.findOne({ _id: id }).populate([
             {
                 path: 'author',

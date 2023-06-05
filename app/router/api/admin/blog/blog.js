@@ -12,8 +12,9 @@ const { create } = require('./../../../../validation/admin/blogValidation')
 
 
 router.post('/create', uploadFile.single('image'), create(), BlogController.create);
-router.get('/getAllBlogs', BlogController.getAllBlogs)
-router.get('/:id', BlogController.getBlogId)
+router.get('/getAllBlogs', BlogController.getAllBlogs);
+router.get('/:id', BlogController.getBlogId);
+router.delete('/:id', BlogController.remove);
 module.exports = {
     blog: router
 }
