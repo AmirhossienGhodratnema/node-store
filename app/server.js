@@ -37,11 +37,13 @@ module.exports = class Application {
         this.#app.use(morgan('dev'));    // Loger
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
-        this.#app.use(this.#express.static(path.join(__dirname, './public')));    // Set static files.
+        this.#app.use(this.#express.static(path.join(__dirname, '../public')));    // Set static files.
+        console.log(path.join(__dirname ,'../public'))
         this.#app.use(cookieParser(process.env.SECRET_KEY_COOKIE_PARSER));    // Set cookie-parser and secret-key. 
+
         // View engine config. 
-        this.#app.set('view engine', 'ejs');    // Set view engine,
-        this.#app.set('views', path.join(__dirname, 'views'));    // Set dir view file.
+        // this.#app.set('view engine', 'ejs');    // Set view engine,
+        // this.#app.set('views', path.join(__dirname, 'views'));    // Set dir view file.
 
         this.#app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc({
             definition: {
@@ -85,7 +87,7 @@ module.exports = class Application {
             console.log('MongoDB: Mongoose connected to DB'.black.bold.italic)
             console.log('-------- Server start up --------'.blue.bold.italic);
             console.log()
-         });
+        });
 
         // Disconneted alert
         mongoose.connection.on('disconnected', () => {

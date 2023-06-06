@@ -123,10 +123,12 @@ module.exports = new class BlogController extends Controller {
     async updateBlog(req, res, next) {
         try {
             const { id } = req.params    // Get id in params
-            const checkingBody = await this.validationData(req);    // Data validation.
-            if (checkingBody) throw { status: 400, message: checkingBody };    // Data error validation.
-            req.body.image = path.join(req.body.fileUploadPath, req.body.filename);    //Add photo field in req.body.
-            req.body.image = req.body.image.replace(/\\/g, '/');    // Replace ( \\ ) to ( / ) for url.
+            // const checkingBody = await this.validationData(req);    // Data validation.
+            // if (checkingBody) throw { status: 400, message: checkingBody };    // Data error validation.
+            if (req.body.filename) {
+                req.body.image = path.join(req.body.fileUploadPath, req.body.filename);    //Add photo field in req.body.
+                req.body.image = req.body.image.replace(/\\/g, '/');    // Replace ( \\ ) to ( / ) for url.
+            };
             const blog = await this.findBlog(req.params);    // Get one blog find id.
             const data = req.body;    // Data to be updated 
             const blockList = ['author', 'comments', 'likes', 'disLikes', 'bookMarks'];    // Movies that are not updated when changing.
@@ -145,10 +147,9 @@ module.exports = new class BlogController extends Controller {
                 data: 'The blog has been successfully updated',
             });
         } catch (error) {
-            if (req?.body?.fileUploadPath && req?.body?.filename) {
-                const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
-                await unlinkPhoto(fileUploadPath, filename);     // Delete image.
-            }
+            const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
+            await unlinkPhoto(fileUploadPath, filename);     // Delete image.
+            console.log('asdf')
             next(error);
         };
     };
