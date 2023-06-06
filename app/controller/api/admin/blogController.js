@@ -27,8 +27,10 @@ module.exports = new class BlogController extends Controller {
                 data: 'Create blog is ok',
             });
         } catch (error) {
-            const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
-            await unlinkPhoto(fileUploadPath, filename);     // Delete image.
+            if (req?.body?.fileUploadPath && req?.body?.filename) {
+                const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
+                await unlinkPhoto(fileUploadPath, filename);     // Delete image.
+            }
             next(error);
         };
     };
@@ -118,9 +120,45 @@ module.exports = new class BlogController extends Controller {
     };
 
 
+    async updateBlog(req, res, next) {
+        try {
+            const { id } = req.params    // Get id in params
+            const checkingBody = await this.validationData(req);    // Data validation.
+            if (checkingBody) throw { status: 400, message: checkingBody };    // Data error validation.
+            req.body.image = path.join(req.body.fileUploadPath, req.body.filename);    //Add photo field in req.body.
+            req.body.image = req.body.image.replace(/\\/g, '/');    // Replace ( \\ ) to ( / ) for url.
+            const blog = await this.findBlog(req.params);    // Get one blog find id.
+            const data = req.body;    // Data to be updated 
+            const blockList = ['author', 'comments', 'likes', 'disLikes', 'bookMarks'];    // Movies that are not updated when changing.
+            const illegal = ['', ' ', '0', 0, -1, null, undefined];
+            Object.keys(data).forEach((key) => {    // Object navigation to check specific items !!!
+                if (blockList.includes(key)) delete data[key];    // Deletes the fields that are in the block list.
+                if (typeof data[key] == 'string') data[key] = data[key].trim();    // Trim the value of each field.
+                if (Array.isArray(data[key]) && Array.length > 0) data[key] = data[key].map(item => item.trim());    // Validating presentation indexes in fields that are presentations.
+                if (illegal.includes(key)) delete data[key];    // Removes unauthorized fields.
+            });
+            const resultUpdate = await Blog.updateOne({ _id: id }, { $set: data });    // The operation of updating fields.
+            if (resultUpdate.modifiedCount == 0) throw { status: 400, message: 'Changes were not applied' };    // Error if the field is not updated.
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                data: 'The blog has been successfully updated',
+            });
+        } catch (error) {
+            if (req?.body?.fileUploadPath && req?.body?.filename) {
+                const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
+                await unlinkPhoto(fileUploadPath, filename);     // Delete image.
+            }
+            next(error);
+        };
+    };
+
+
+
+
+
     async findBlog(query = {}) {    // Find one blog.
         const { id } = query;    // Getting the query from the paramet.
-        console.log('id', id)
         const blog = await Blog.findOne({ _id: id }).populate([
             {
                 path: 'author',
@@ -140,4 +178,6 @@ module.exports = new class BlogController extends Controller {
         if (!blog) throw { status: 400, message: 'There is no blog' };    // Blog error
         return blog    // Return blog
     };
+
+
 };
