@@ -1,11 +1,11 @@
 const router = require('express').Router();
 
 
+// Controller
+const ProductController = require('./../../../../controller/api/admin/productController');
 
 
-router.get('/', (req, res, next) => {
-    return res.json('Product route is ok');
-});
+router.get('/', ProductController.getAll);
 
 
 
