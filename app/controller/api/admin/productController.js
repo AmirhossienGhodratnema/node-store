@@ -1,6 +1,6 @@
 const Controller = require("../../controller");
 const path = require('path');
-
+const { StatusCodes } = require('http-status-codes')
 // Options
 const { unlinkPhoto, filesUpload, checkMongoId } = require("../../../../functions/golobal");
 const { Product } = require('./../../../models/product');
@@ -8,8 +8,6 @@ const { Product } = require('./../../../models/product');
 module.exports = new class ProductController extends Controller {
     async create(req, res, next) {
         try {
-            console.log(req.files);
-
             const checkingBody = await this.validationData(req);    // Data validation.
             if (checkingBody) throw { status: 400, message: checkingBody };    // Data error validation.
             const images = await filesUpload(req.files, req.body);    // Return the address of several photos
@@ -32,7 +30,7 @@ module.exports = new class ProductController extends Controller {
 
             await Product.create({ title, type, images, shortText, shortDescription, description, tags, category, price, features, supplier })    // Save the product in mongoDB.
             return res.status(200).json({
-                status: 200,
+                status: StatusCodes.OK,
                 success: true,
                 message: 'The product has been successfully registered',
             });
@@ -51,7 +49,7 @@ module.exports = new class ProductController extends Controller {
             const product = await Product.find({});    // Get all products
             if (!product) throw { status: 400, message: 'There is no product' };
             return res.status(200).json({
-                status: 200,
+                status: StatusCodes.OK,
                 success: true,
                 product
             })
@@ -64,11 +62,30 @@ module.exports = new class ProductController extends Controller {
         try {
             const { id } = req.params;    // Get id from req.params.
             const result = await checkMongoId(id);    // Check mongoId.
-            const product = await Product.findById(id);
+            const product = await Product.findById(id);    // Get Product
             return res.json({
                 product,
                 message: 'PrGet product by id',
             });
+        } catch (error) {
+            next(error);
+        };
+    };
+
+    async remove(req, res, next) {
+        try {
+            const { id } = req.params;    // Get id from req.params.
+            await checkMongoId(id);    // Check mongoId.
+            const product = await Product.findById(id);
+            if (!product) throw { status: 400, message: 'There is no such product' }
+            const resutlRemove = await Product.deleteOne({ _id: id });
+            if (resutlRemove.deletedCount == 0) throw { status: 400, message: 'The delete operation failed' };
+            return res.json({
+                status: 200,
+                success: true,
+                message: 'Remove',
+                product
+            })
         } catch (error) {
             next(error);
         };
