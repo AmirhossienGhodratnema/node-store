@@ -28,7 +28,7 @@ const Schema = new mongoose.Schema({
     delete: { type: Boolean, defult: false },
     format: { type: String },
     supplier: { type: mongoose.Types.ObjectId, require: true },
-    features: { type: [Features], default: [] },
+    features: { type: Features, default: [] },
 });
 
 

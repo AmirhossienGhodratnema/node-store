@@ -18,8 +18,23 @@ module.exports = new class ProductController extends Controller {
                 req.body.image = path.join(req.body.fileUploadPath, req.body.filename);    //Add photo field in req.body.
                 req.body.image = req.body.image.replace(/\\/g, '/');    // Replace ( \\ ) to ( / ) for url.
             };
-            let { image, title, shortText, shortDescription, description, tags, category, price } = req.body;    // Get fiels in body.
-            await Product.create({ title, images: image, shortText, shortDescription, description, tags, category, price })    // Save the product in mongoDB.
+
+            let { image,
+                title,
+                shortText,
+                shortDescription,
+                description,
+                tags, category,
+                price, length, height,
+                width, weight, coler, model
+                , madein } = req.body;    // Get fiels in body.
+
+            let features = {
+                length, height, width, weight,
+                coler, model, madein
+            };
+
+            await Product.create({ title, images: image, shortText, shortDescription, description, tags, category, price,features })    // Save the product in mongoDB.
             return res.status(200).json({
                 status: 200,
                 success: true,
