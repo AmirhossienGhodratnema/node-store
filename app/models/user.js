@@ -13,6 +13,7 @@ const Schema = new mongoose.Schema({
             expireIn: 0
         }
     },
+    courses: { type: [mongoose.Types.ObjectId], ref: 'course', defult: [] },
     bills: { type: [], default: [] },
     disCount: { type: Number, default: 0 },
     birthday: { type: String },

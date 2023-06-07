@@ -1,7 +1,6 @@
 const cookieParser = require('cookie-parser');
 
 // My require
-const { route: ApiRoute } = require('./router/api/router');
 const { errorHandler, notFoundError } = require('./errors/errorHandlers');
 const { AllRoutesApi } = require('./router/api/router');
 const { AllRoutesWeb } = require('./router/web/router');
