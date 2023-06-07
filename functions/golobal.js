@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const validator = require('validator');
+
 
 const unlinkPhoto = async (fileUploadPath, filename) => {
     const file = path.join(__dirname, '..', 'public', fileUploadPath, filename);
@@ -12,7 +14,14 @@ const filesUpload = async (files, body) => {    // Return the address of several
 };
 
 
+async function checkMongoId(id) {
+    if (!validator.isMongoId(id)) {
+        throw { status: 400, message: 'MongoID is wrong' };
+    }
+}
+
 module.exports = {
     unlinkPhoto,
-    filesUpload
+    filesUpload,
+    checkMongoId
 }

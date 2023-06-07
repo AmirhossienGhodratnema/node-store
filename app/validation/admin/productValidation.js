@@ -28,12 +28,17 @@ const create = () => {
         check('category')
             .notEmpty().withMessage('category require - typeOf Array'),
 
+        check('type')
+            .notEmpty().withMessage('category require - typeOf Array'),
+
         check('shortText')
             .isLength({ min: 3, max: 20 }).withMessage('Between 3 and 20 characters'),
 
         check('price')
             .notEmpty().withMessage('category require - typeOf Array')
             .isNumeric().withMessage('tags require - typeOf number'),
+
+
     ]
 };
 
