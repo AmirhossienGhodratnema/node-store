@@ -12,7 +12,7 @@ const { uploadFile } = require('../../../../utils/upload');
 
 
 router.get('/', uploadFile.single('image'), create(), ProductController.create);
-
+router.get('/getAll', ProductController.getAll);
 
 
 module.exports = {
