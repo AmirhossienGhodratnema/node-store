@@ -5,7 +5,11 @@ const router = require('express').Router();
 const ProductController = require('./../../../../controller/api/admin/productController');
 
 
-router.get('/', ProductController.getAll);
+// Options
+const { uploadFile } = require('../../../../utils/upload');
+
+
+router.get('/', uploadFile.single('image'), ProductController.create);
 
 
 

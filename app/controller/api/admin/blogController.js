@@ -149,7 +149,6 @@ module.exports = new class BlogController extends Controller {
         } catch (error) {
             const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
             await unlinkPhoto(fileUploadPath, filename);     // Delete image.
-            console.log('asdf')
             next(error);
         };
     };
