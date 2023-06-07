@@ -11,7 +11,7 @@ const { create } = require('./../../../../validation/admin/productValidation')
 const { uploadFile } = require('../../../../utils/upload');
 
 
-router.get('/', uploadFile.single('image'), create(), ProductController.create);
+router.get('/', uploadFile.array('images', 10), create(), ProductController.create);
 router.get('/getAll', ProductController.getAll);
 
 

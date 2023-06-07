@@ -25,7 +25,7 @@ const Schema = new mongoose.Schema({
     price: { type: Number, defult: 0 },
     discount: { type: Number, default: 0 },
     type: { type: String, require: true },
-    delete: { type: Boolean, defult: false },
+    delete: { type: Boolean, require: true, default: false },
     format: { type: String },
     supplier: { type: mongoose.Types.ObjectId, require: true },
     features: { type: Features, default: [] },
