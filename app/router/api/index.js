@@ -11,17 +11,14 @@ const { AdminRouter } = require('./admin/admin');
 
 const { indexPage } = require('./indexPage/indexPage');
 const { verifyToken } = require('../../middleware/verifytoken');
+const { chckRole } = require('./../../middleware/access');
 
 router.use('/', indexPage);
 router.use('/user', userRouters);
-router.use('/admin', verifyToken, AdminRouter);
-
+router.use('/admin', verifyToken, chckRole('ADMIN'), AdminRouter);
 
 
 router.use('/developer', developerRoute);
-
-
-
 
 
 module.exports = {
