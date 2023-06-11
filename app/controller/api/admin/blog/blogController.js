@@ -1,12 +1,12 @@
-const Controller = require("../../controller");
+const Controller = require("../../../controller");
 
 // Models
-const { Blog } = require("../../../models/blog");
-const { Category } = require("../../../models/categorys");
+const { Blog } = require("../../../../models/blog");
+const { Category } = require("../../../../models/categorys");
 
 // Options
 const path = require('path');
-const { unlinkPhoto } = require("../../../../functions/golobal");
+const { unlinkPhoto } = require("../../../../../functions/golobal");
 
 
 

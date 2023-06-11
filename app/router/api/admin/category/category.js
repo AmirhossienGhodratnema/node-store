@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 
 // Controller
-const CategoryController = require('../../../../controller/api/admin/categoryController');
+const CategoryController = require('../../../../controller/api/admin/category/categoryController');
 
 // Validation
 const { create, edit } = require('./../../../../validation/admin/categoryValidation')

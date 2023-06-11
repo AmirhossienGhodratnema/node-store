@@ -5,7 +5,7 @@ const router = require('express').Router();
 const { uploadFile } = require('../../../../utils/upload');
 
 // Controller
-const BlogController = require('./../../../../controller/api/admin/blogController')
+const BlogController = require('../../../../controller/api/admin/blog/blogController')
 
 // Validation
 const { create } = require('./../../../../validation/admin/blogValidation')

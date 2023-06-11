@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 
 // Controller
-const ProductController = require('./../../../../controller/api/admin/productController');
+const ProductController = require('../../../../controller/api/admin/product/productController');
 
 // Validation
 const { create } = require('./../../../../validation/admin/productValidation')

@@ -1,9 +1,9 @@
-const Controller = require("../../controller");
+const Controller = require("../../../controller");
 const path = require('path');
 const { StatusCodes } = require('http-status-codes')
 // Options
-const { unlinkPhoto, filesUpload, checkMongoId } = require("../../../../functions/golobal");
-const { Product } = require('./../../../models/product');
+const { unlinkPhoto, filesUpload, checkMongoId } = require("../../../../../functions/golobal");
+const { Product } = require('../../../../models/product');
 
 
 const BlockList = {    // Create enum in js

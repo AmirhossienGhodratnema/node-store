@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
-const Controller = require("../../controller");
-const { Course } = require("../../../models/course");
-const { fileUploadSingle, createError, ValidationData, unlinkPhoto, checkMongoId } = require("../../../../functions/golobal");
+const Controller = require("../../../controller");
+const { Course } = require("../../../../models/course");
+const { fileUploadSingle, createError, ValidationData, unlinkPhoto, checkMongoId } = require("../../../../../functions/golobal");
 
 const AllowedList = [
     'image',
@@ -97,14 +97,15 @@ module.exports = new class CourseController extends Controller {
     };
 
 
-
     async createChapter(req, res, next) {
         try {
-            const { id, title, description, episodes } = req.body;    // Get data from body.
+            let { id, title, description, episodes } = req.body;    // Get data from body.
+            title = title.trim()    // Trim the excess title spaces.
             await checkMongoId(id);    // Check mongoId.
             const course = await this.courseFindById(id);
             let chaptersList = []    // Black list chapter title list.
-            let chapterUpdate = title.replace(' ', '#');    // Replace ' ' with '#' for check unieq title. 
+            let chapterUpdate;
+            chapterUpdate = await title.replace(' ', '#');    // Replace ' ' with '#' for check unieq title. 
             course.chapters.map(chapter => {    // Push title in chaptersList.
                 chaptersList.push(chapter.title)
             });

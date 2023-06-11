@@ -1,6 +1,6 @@
 const { check, body } = require("express-validator");
-const { Category } = require("../../../models/categorys");
-const Controller = require("../../controller");
+const { Category } = require("../../../../models/categorys");
+const Controller = require("../../../controller");
 
 module.exports = new class CategoryController extends Controller {
     async create(req, res, next) {
