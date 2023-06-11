@@ -50,6 +50,22 @@ module.exports = new class ChapterController extends Controller {
         };
     };
 
+    async remove(req, res, next) {
+        try {
+            const { id } = req.params;    // Get data from param.
+            const chapter = await this.getOneChapter(id);    // Gettin one chapters with id.
+            const removeResultChapter = await Course.updateOne({ 'chapters._id': id }, { $pull: { chapters: { _id: id } } });    // Remove chapter with pull.
+            if (removeResultChapter.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'The chapter was not deleted');    // Error The chapter was not deleted.
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Remove chapter',
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
+
 
     /* ---------- Options ---------- */
 
@@ -59,4 +75,11 @@ module.exports = new class ChapterController extends Controller {
         if (!chapters) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no such course');    // Error There is no such course.
         return chapters;
     };
+
+
+    async getOneChapter(id) {
+        const chapter = await Course.findOne({ 'chapters._id': id }, { 'chapters.$': 1 });
+        if (!chapter) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'No such chapter was found');
+        return chapter;
+    }
 };
