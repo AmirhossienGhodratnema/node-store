@@ -10,7 +10,7 @@ const Episodes = mongoose.Schema({
 const Chapter = mongoose.Schema({
     title: { type: String, require: true },
     description: { type: String, defult: '' },
-    episodes: { type: [Episodes], defult: '' },
+    episodes: { type: [Episodes], defult: [] },
 
 });
 

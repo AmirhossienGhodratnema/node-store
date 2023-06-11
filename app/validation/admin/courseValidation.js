@@ -46,4 +46,18 @@ const create = () => {
 };
 
 
-module.exports = { create };
+const chapter = () => {
+    return [
+        check('title')
+            .notEmpty().withMessage('text require'),
+
+        check('description')
+            .notEmpty().withMessage('description require'),
+
+    ]
+};
+
+
+
+
+module.exports = { create, chapter };

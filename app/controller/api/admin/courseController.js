@@ -96,6 +96,35 @@ module.exports = new class CourseController extends Controller {
         };
     };
 
+
+
+    async createChapter(req, res, next) {
+        try {
+            const { id, title, description, episodes } = req.body;    // Get data from body.
+            await checkMongoId(id);    // Check mongoId.
+            const course = await this.courseFindById(id);
+            let chaptersList = []    // Black list chapter title list.
+            let chapterUpdate = title.replace(' ', '#');    // Replace ' ' with '#' for check unieq title. 
+            course.chapters.map(chapter => {    // Push title in chaptersList.
+                chaptersList.push(chapter.title)
+            });
+            if (chaptersList.includes(chapterUpdate)) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is a season or this name');    // Error having the same title.
+            let chapters = { title: chapterUpdate, description, episodes: episodes || [] };    // Main chapters
+            const updateCourse = await Course.updateOne({ _id: course.id }, { $push: { chapters } });    // Update course to add chapter.
+            if (updateCourse.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Chapter was not added');    // Error not updating the course.
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Chapter was created',
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
+
+
+    /* ---------- Options ---------- */
+
     async cleaning(data) {
         return Object.keys(data).map(key => {
             if (process.env.illegal.includes(data[key])) delete data[key];    // Remove unauthorized fields.
@@ -103,5 +132,11 @@ module.exports = new class CourseController extends Controller {
             if (typeof data[key] == 'string') data[key] = data[key].trim();    // Removing extra spaces at the beginning and end of fields that are strings
             if (Array.isArray(data[key])) data[key] = data[key].map(item => item.trim());    // Removing the first and last space of each index in the presentation.
         });
+    }
+
+    async courseFindById(id) {
+        const course = await Course.findById(id);
+        if (!course) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no course');
+        return course
     }
 };
