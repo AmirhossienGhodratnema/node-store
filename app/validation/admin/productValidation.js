@@ -35,7 +35,7 @@ const create = () => {
             .isLength({ min: 3, max: 20 }).withMessage('Between 3 and 20 characters'),
 
         check('price')
-            .notEmpty().withMessage('category require - typeOf Array')
+            .notEmpty().withMessage('price require')
             .isNumeric().withMessage('tags require - typeOf number'),
 
 

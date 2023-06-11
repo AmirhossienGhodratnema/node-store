@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Features = new mongoose.Schema({
-    length: { type: String, defult: '0' },
+    lengths: { type: String, defult: '0' },
     height: { type: String, defult: '0' },
     width: { type: String, defult: '0' },
     weight: { type: String, defult: '0' },
