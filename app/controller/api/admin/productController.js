@@ -12,12 +12,10 @@ module.exports = new class ProductController extends Controller {
             if (checkingBody) throw { status: 400, message: checkingBody };    // Data error validation.
             const images = await filesUpload(req.files, req.body);    // Return the address of several photos
             const supplier = req.user._id;    // Get supplier
-
             let { image, title, shortText, shortDescription, description, tags,    // Get fiels in body.
                 category, price, length, height, width, weight, coler, model
                 , madein, type
             } = req.body;
-
             let features = {    // Set data in features
                 length: length || 0,
                 height: height || 0,
@@ -27,7 +25,6 @@ module.exports = new class ProductController extends Controller {
                 model: model || 0,
                 madein: madein || 0,
             };
-
             await Product.create({ title, type, images, shortText, shortDescription, description, tags, category, price, features, supplier })    // Save the product in mongoDB.
             return res.status(200).json({
                 status: StatusCodes.OK,
@@ -58,10 +55,11 @@ module.exports = new class ProductController extends Controller {
         };
     };
 
+
     async getById(req, res, next) {
         try {
             const { id } = req.params;    // Get id from req.params.
-            const result = await checkMongoId(id);    // Check mongoId.
+            await checkMongoId(id);    // Check mongoId.
             const product = await Product.findById(id);    // Get Product
             return res.json({
                 product,
@@ -71,6 +69,33 @@ module.exports = new class ProductController extends Controller {
             next(error);
         };
     };
+
+
+    async productSearch(req, res, next) {
+        try {
+            let { search } = req.params;    // Get params.
+            search = search.toLowerCase();    // Change to lowerCase.
+            let product;    // Global variable.
+            if (search) {
+                product = await Product.find({ $text: { $search: new RegExp(search, 'gi') } });    // Search based on the given value.
+                return res.status(StatusCodes.OK).json({
+                    status: StatusCodes.OK,
+                    success: true,
+                    product
+                })
+            } else {
+                product = await Product.find({});    // Find all product.
+                return res.status(StatusCodes.OK).json({
+                    status: StatusCodes.OK,
+                    success: true,
+                    product,
+                });
+            }
+        } catch (error) {
+            next(error);
+        };
+    };
+
 
     async remove(req, res, next) {
         try {

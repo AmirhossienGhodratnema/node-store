@@ -11,10 +11,10 @@ const Features = new mongoose.Schema({
 })
 
 const Schema = new mongoose.Schema({
-    title: { type: String, require: true },
-    shortText: { type: String, require: true },
-    shortDescription: { type: String, require: true },
-    description: { type: String, require: true },
+    title: { type: String, require: true, toLower: true },
+    shortText: { type: String, require: true, toLower: true },
+    shortDescription: { type: String, require: true, toLower: true },
+    description: { type: String, require: true, toLower: true },
     images: { type: [String], require: true },
     tags: { type: [String], defult: [] },
     category: { type: [mongoose.Types.ObjectId], ref: 'category', require: true },
@@ -31,6 +31,8 @@ const Schema = new mongoose.Schema({
     features: { type: Features, default: [] },
 });
 
+
+Schema.index({ title: 'text', shortText: 'text', shortDescription: 'text', description: 'text' });
 
 module.exports = {
     Product: mongoose.model('Product', Schema)
