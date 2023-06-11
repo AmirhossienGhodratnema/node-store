@@ -112,7 +112,6 @@ module.exports = new class ProductController extends Controller {
 
 
             const resultUpdateProduct = await Product.updateOne({ _id: product._id }, { $set: { data, images, features } });    // Updating the product based on ID
-            console.log('resultUpdateProduct', resultUpdateProduct)
             if (resultUpdateProduct.matchedCount == 0) throw { status: StatusCodes.INTERNAL_SERVER_ERROR, message: 'Product update was not done' };    // Send Product update was not done Error
             return res.status(StatusCodes.OK).json({    // Correct response
                 status: StatusCodes.OK,

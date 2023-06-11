@@ -1,6 +1,8 @@
 const { check } = require('express-validator');
 
 
+
+
 const create = () => {
     return [
         check('title')
@@ -29,16 +31,17 @@ const create = () => {
             .notEmpty().withMessage('category require - typeOf Array'),
 
         check('type')
-            .notEmpty().withMessage('category require - typeOf Array'),
-
-        check('shortText')
-            .isLength({ min: 3, max: 20 }).withMessage('Between 3 and 20 characters'),
+            .notEmpty().withMessage('type require'),
 
         check('price')
             .notEmpty().withMessage('price require')
-            .isNumeric().withMessage('tags require - typeOf number'),
+            .isNumeric().withMessage('price require - typeOf number'),
 
+        check('status')
+            .notEmpty().withMessage('status require'),
 
+        check('teacher')
+            .notEmpty().withMessage('teacher require'),
     ]
 };
 
