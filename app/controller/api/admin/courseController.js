@@ -58,16 +58,18 @@ module.exports = new class CourseController extends Controller {
             await ValidationData(req);    // Validation data and throw error.
             const image = await fileUploadSingle(req.body);    // Getting image path.
             await this.cleaning(data);    // Data cleaning
+            if (data.type === 'free') data.price = 0
+
             const course = await Course.create({    // Save course in DB
                 ...data,
                 image,
                 status: 'noStart',
             });
             if (!course._id) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Course not created');    // Error courser not created.
-            return res.status(StatusCodes.OK).json({
-                status: StatusCodes.OK,
+            return res.status(StatusCodes.CREATED).json({
+                status: StatusCodes.CREATED,
                 success: true,
-                message: 'Create course true',
+                message: 'Course created successfully',
             });
         } catch (error) {
             if (req?.body?.fileUploadPath && req?.body?.filename) {
