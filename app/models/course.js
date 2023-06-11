@@ -32,9 +32,11 @@ const Schema = new mongoose.Schema({
     time: { type: String, defult: '00:00' },
     format: { type: String },
     teacher: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
-    chapter: { type: [Chapter], defult: [] },
+    chapters: { type: [Chapter], defult: [] },
     students: { type: [mongoose.Types.ObjectId], ref: 'user', defult: [] }
 });
+
+Schema.index({ title: 'text', short_text: 'text', shortDescription: 'text', description: 'text' });
 
 
 module.exports = {
