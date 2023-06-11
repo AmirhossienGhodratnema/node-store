@@ -103,12 +103,10 @@ module.exports = new class BlogController extends Controller {
 
     async remove(req, res, next) {
         try {
-            const { id } = req.params;
-            await this.findBlog(req.params);
-            const remove = await Blog.deleteOne({ _id: id });
-            if (remove.deletedCount == 0) {
-                throw { status: 400, message: 'The delete operation failed' };
-            };
+            const { id } = req.params;    // Get id from params.
+            await this.findBlog(req.params);    // Getting blog info. 
+            const remove = await Blog.deleteOne({ _id: id });    // Delete blog.
+            if (remove.deletedCount == 0) throw { status: 400, message: 'The delete operation failed' };
             return res.json({
                 status: 200,
                 success: true,

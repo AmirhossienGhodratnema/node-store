@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { uploadFile } = require('../../../../utils/upload');
 // Controller
 const CourseController = require('../../../../controller/api/admin/course/courseController');
+const ChapterController = require('../../../../controller/api/admin/course/chapterController');
 
 // Validation
 const { create , chapter} = require('./../../../../validation/admin/courseValidation');
@@ -12,7 +13,7 @@ const { create , chapter} = require('./../../../../validation/admin/courseValida
 router.get('/', CourseController.index);
 router.post('/create', uploadFile.single('image'), create(), CourseController.create);
 router.get('/get/:id', CourseController.getCourseById);
-router.put('/createCapter', CourseController.createChapter);
+router.put('/createCapter', ChapterController.createChapter);
 
 
 
