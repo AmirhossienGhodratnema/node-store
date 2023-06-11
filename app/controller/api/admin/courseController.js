@@ -1,9 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const Controller = require("../../controller");
 const { Course } = require("../../../models/course");
-const { uploadFile } = require("../../../utils/upload");
-const { filesUpload, fileUploadSingle, createError, ValidationData, unlinkPhoto } = require("../../../../functions/golobal");
-
+const { fileUploadSingle, createError, ValidationData, unlinkPhoto, checkMongoId } = require("../../../../functions/golobal");
 
 const AllowedList = [
     'image',
@@ -80,6 +78,23 @@ module.exports = new class CourseController extends Controller {
         };
     };
 
+
+    async getCourseById(req, res, next) {
+        try {
+            const { id } = req.params;    // Get data from params.
+            await checkMongoId(id);
+            const course = await Course.findById(id);
+            if (!course) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no course');
+
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                course
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
 
     async cleaning(data) {
         return Object.keys(data).map(key => {
