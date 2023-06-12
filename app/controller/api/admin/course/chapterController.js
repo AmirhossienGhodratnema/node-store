@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const { checkMongoId, createError } = require("../../../../../functions/golobal");
+const { checkMongoId, createError, deleteInvalidPropertyInObject } = require("../../../../../functions/golobal");
 const { Course } = require("../../../../models/course");
 const Controller = require("../../../controller");
 
@@ -66,6 +66,25 @@ module.exports = new class ChapterController extends Controller {
         };
     };
 
+    async updateChapter(req, res, next) {
+        try {
+            const { id } = req.params;    // Get data from params.
+            const data = req.body;    // Get data from body for update chapter.
+            const chapter = await this.getOneChapter(id);    // Get chapter for existance.
+            if (!chapter) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no such chapter');    // Error no such chapter.
+            deleteInvalidPropertyInObject(data, ['_id']);    // Check chapter and remove some fiels.
+            const updateResult = await Course.updateOne({ 'chapters._id': id }, { $set: { 'chapters.$': data } });    // Chapter update opration.
+            if (updateResult.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'The chpater was not updated');    // Error chapter not updated.
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Chapter updated',
+                data
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
 
     /* ---------- Options ---------- */
 

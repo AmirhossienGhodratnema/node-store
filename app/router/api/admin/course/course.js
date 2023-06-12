@@ -16,6 +16,7 @@ router.get('/get/:id', CourseController.getCourseById);
 router.put('/createCapter/create', ChapterController.createChapter);
 router.get('/list/:id', ChapterController.chaptersList);
 router.put('/remove/chapter/:id', ChapterController.remove);
+router.patch('/update/chapter/:id', ChapterController.updateChapter);
 
 
 
