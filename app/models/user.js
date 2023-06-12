@@ -18,7 +18,7 @@ const Schema = new mongoose.Schema({
     disCount: { type: Number, default: 0 },
     birthday: { type: String },
     rols: { type: [], defult: ['USER'] },
-});
+}, { toJSON: { virtuals: true, versionKey: false } });
 
 
 module.exports = {

@@ -21,7 +21,7 @@ const Schema = new mongoose.Schema({
     description: { type: String, require: true },
     image: { type: String, require: true },
     tags: { type: [String], defult: [] },
-    category: { type: [mongoose.Types.ObjectId], ref: 'category', require: true },
+    category: { type: [mongoose.Types.ObjectId], ref: 'Category', require: true },
     comments: { type: [], defult: [] },
     likes: { type: [mongoose.Types.ObjectId], defult: [] },
     creator: { type: mongoose.Types.ObjectId, require: true },
@@ -33,10 +33,10 @@ const Schema = new mongoose.Schema({
     time: { type: String, defult: '00:00' },
     status: { type: String, defult: 'holding' },    // holding, complated, noStart
     format: { type: String },
-    teacher: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    teacher: { type: mongoose.Types.ObjectId, ref: 'User', require: true },
     chapters: { type: [Chapter], defult: [] },
-    students: { type: [mongoose.Types.ObjectId], ref: 'user', defult: [] }
-});
+    students: { type: [mongoose.Types.ObjectId], ref: 'User', defult: [] }
+}, { toJSON: { virtuals: true } });
 
 Schema.index({ title: 'text', shortText: 'text', shortDescription: 'text', description: 'text' });
 

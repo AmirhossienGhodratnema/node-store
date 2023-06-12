@@ -11,29 +11,29 @@ const Schema = new mongoose.Schema({
 });
 
 
-// Schema.virtual('child', {
-//     ref: 'Category',
-//     localField: '_id',
-//     foreignField: 'parent'
-// })
+Schema.virtual('child', {
+    ref: 'Category',
+    localField: '_id',
+    foreignField: 'parent'
+})
 
 
-// function autoPopulate(next) {    // Getting populate data in the model
-//     this.populate([
-//         {
-//             path: 'child',
-//             select: {
-//                 '_id': 0,
-//                 '__v': 0,
-//                 'id': 0,
-//             },
-//         },
-//     ]);
-//     next();
-// }
+function autoPopulate(next) {    // Getting populate data in the model
+    this.populate([
+        {
+            path: 'child',
+            select: {
+                '_id': 0,
+                '__v': 0,
+                'id': 0,
+            },
+        },
+    ]);
+    next();
+}
 
-// Schema.pre('find', autoPopulate);
-// Schema.pre('findOne', autoPopulate);
+Schema.pre('find', autoPopulate);
+Schema.pre('findOne', autoPopulate);
 
 
 module.exports = {
