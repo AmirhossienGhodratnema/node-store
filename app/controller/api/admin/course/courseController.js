@@ -29,7 +29,8 @@ module.exports = new class CourseController extends Controller {
             let course;
             if (search) {
                 course = await Course.find({ $text: { $search: search } }).populate([
-                    { path: 'teacher' }
+                    { path: 'teacher', select: { phone: 1, email: 1, firstName: 1, lastName: 1 } },
+                    { path: 'category'}
                 ]);
                 return res.status(StatusCodes.OK).json({
                     status: StatusCodes.OK,
@@ -40,7 +41,7 @@ module.exports = new class CourseController extends Controller {
             } else {
                 course = await Course.find({}).populate([
                     { path: 'teacher', select: { phone: 1, email: 1, firstName: 1, lastName: 1 } },
-                    { path: 'category', select: {child :0}}
+                    { path: 'category'}
                 ]);
                 return res.status(StatusCodes.OK).json({
                     status: StatusCodes.OK,
