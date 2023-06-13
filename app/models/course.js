@@ -5,6 +5,7 @@ const Episodes = mongoose.Schema({
     description: { type: String, require: true },
     type: { type: String, defult: 'unlock' },
     time: { type: String, defult: '00:00' },
+    video: { type: String, defult: '' },
     chapter: { type: mongoose.Types.ObjectId, require: true },
     course: { type: mongoose.Types.ObjectId, require: true },
 });
