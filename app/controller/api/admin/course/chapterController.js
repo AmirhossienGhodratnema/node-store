@@ -70,9 +70,11 @@ module.exports = new class ChapterController extends Controller {
         try {
             const { id } = req.params;    // Get data from params.
             const data = req.body;    // Get data from body for update chapter.
+            console.log(id)
             const chapter = await this.getOneChapter(id);    // Get chapter for existance.
             if (!chapter) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no such chapter');    // Error no such chapter.
-            deleteInvalidPropertyInObject(data, ['_id']);    // Check chapter and remove some fiels.
+            const mainFields = ['title', 'description', 'episodes'];
+            deleteInvalidPropertyInObject(data, ['_id'], mainFields);    // Check chapter and remove some fiels.
             const updateResult = await Course.updateOne({ 'chapters._id': id }, { $set: { 'chapters.$': data } });    // Chapter update opration.
             if (updateResult.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'The chpater was not updated');    // Error chapter not updated.
             return res.status(StatusCodes.OK).json({

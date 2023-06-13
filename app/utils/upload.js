@@ -34,17 +34,36 @@ function fileFilter(req, file, cb) {
     if (mimType.includes(ext)) {
         return cb(null, true)
     }
-    cb(new Error('Invalid IMAGE Type'))
+    cb(new Error('Invalid image type'))
+}
+
+function videoFilter(req, file, cb) {
+    const mimType = ['.mp4', '.mpg', '.mov', '.avi', '.mkv'];
+    const ext = path.extname(file.originalname);
+    if (mimType.includes(ext)) {
+        return cb(null, true)
+    }
+    cb(new Error('Invalid video type'))
 }
 
 
-const maxSize = 1 * 1000 * 1000
+
+const picSize = 1 * 1000 * 1000;
+const videoSize = 200 * 1000 * 1000;
+
 const uploadFile = multer({
     storage,
     fileFilter,
-    limits: { fileSize: maxSize },
+    limits: { fileSize: picSize },
+});
+
+const videoUpload = multer({
+    storage,
+    videoFilter,
+    limits: { fileSize: videoSize },
 });
 
 module.exports = {
-    uploadFile
+    uploadFile,
+    videoUpload
 }

@@ -1,16 +1,17 @@
 const router = require('express').Router();
 
-const { uploadFile } = require('../../../../utils/upload');
 // Controller
-const EpisodeController = require('../../../../controller/api/admin/course/episodeController');
+const EpisodeController = require('./../../../../controller/api/admin/course/episodeController')
 
 // Validation
-// const { create, chapter } = require('./../../../../validation/admin/courseValidation');
+const { create } = require('./../../../../validation/admin/episodeValidation');
+
+// Options
+const { videoUpload } = require('../../../../utils/upload');
 
 
-router.get('/', EpisodeController.index);
 
-
+router.post('/create', videoUpload.single('video'), create(), EpisodeController.create);
 
 
 

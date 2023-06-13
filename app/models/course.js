@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const Episodes = mongoose.Schema({
     title: { type: String, require: true },
     description: { type: String, require: true },
-    type: { type: String, defult: 'free' },
+    type: { type: String, defult: 'unlock' },
     time: { type: String, defult: '00:00' },
+    chapter: { type: mongoose.Types.ObjectId, require: true },
+    course: { type: mongoose.Types.ObjectId, require: true },
 });
 
 const Chapter = mongoose.Schema({
