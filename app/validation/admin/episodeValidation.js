@@ -23,8 +23,20 @@ const create = () => {
             .notEmpty().withMessage('course require'),
     ]
 };
+const edit = () => {
+    return [
+        check('title')
+            .notEmpty().withMessage('text require'),
+
+        check('description')
+            .notEmpty().withMessage('description require'),
+
+        check('type')
+            .notEmpty().withMessage('type require'),
+    ]
+};
 
 
 
 
-module.exports = { create };
+module.exports = { create, edit };

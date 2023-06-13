@@ -52,7 +52,7 @@ module.exports = new class EpisodeController extends Controller {
             const { id } = req.params;    // Get id from params.
             await checkMongoId(id);    // Check mongoId.
             const episode = await Course.findOne({ 'chapters.episodes._id': id });    // Gettin the episode for its authenticity.
-            if(!episode) await createError(StatusCodes.NOT_FOUND, 'There is no such episode');    // Error for There is no such episode.
+            if (!episode) await createError(StatusCodes.NOT_FOUND, 'There is no such episode');    // Error for There is no such episode.
             const updateResult = await Course.updateOne({ 'chapters.episodes._id': id }, {    // Update and remove episode.
                 $pull: {
                     'chapters.$.episodes': {
@@ -71,4 +71,76 @@ module.exports = new class EpisodeController extends Controller {
         };
     };
 
+
+    async edit(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { filename, fileUploadPath } = req.body;
+            await ValidationData(req);    // Data fields validation.
+            // const test = await this.getEpisode(id);
+
+
+            if (filename && fileUploadPath) {
+                const videoAddres = path.join(fileUploadPath, filename).replace(/\\/g, '/');    // Create the url of the video.
+                const videoUrl = `${process.env.BASE_URL}${process.env.SERVER_PORT}/${videoAddres}`;    // Getttin the complete video address.
+                const duration = await getVideoDurationInSeconds(videoUrl);    // Capture seconds of video.
+                const realTime = await getTime(duration);    // Get real time video.
+                req.body.time = realTime;
+                req.body.videoAddres = videoUrl;
+            }
+            const mainFields = ['title', 'description', 'type', 'chapter', 'course', 'video', 'fileUploadPath', 'filename'];    // The main fields to be saved in the database.
+            // await deleteInvalidPropertyInObject(req.body, ['_id'], mainFields);     // Check chapter and remove some fiels.
+
+            // const episodes = {    // Create episode object
+            //     title,
+            //     description,
+            //     type,
+            //     time: realTime,
+            //     video: videoAddres,
+            //     chapter,
+            //     course
+            // };
+
+
+
+
+            // title: { type: String, require: true },
+            // description: { type: String, require: true },
+            // type: { type: String, defult: 'unlock' },
+            // time: { type: String, defult: '00:00' },
+            // video: { type: String, defult: '' },
+            // chapter: { type: mongoose.Types.ObjectId, require: true },
+            // course: { type: mongoose.Types.ObjectId, require: true },
+
+            // const updateResult = await Course.updateOne({ 'chapters.episodes._id': id }, {    // Update and remove episode.
+            //     $set: {
+            //         'chapters.$.episodes': {
+            //             title:req.body.title ||
+            //         }
+            //     }
+            // })
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'No edit...',
+            });
+        } catch (error) {
+            if (req?.body?.fileUploadPath && req?.body?.filename) {
+                const { fileUploadPath, filename } = req.body;    // Get fiels for unlinkPhoto.
+                await unlinkPhoto(fileUploadPath, filename);     // Delete image.
+            };
+            next(error);
+        };
+    };
+
+
+
+    async getEpisode(id) {
+        const episdoe = await Course.findOne({ 'chapters.episodes._id': id }, { 'chapters.episodes': 1 });
+        if (!episdoe) await createError({ status: StatusCodes.INTERNAL_SERVER_ERROR, message: 'There is no such episode' });
+
+        // const result = 
+        // return episdoe.chapters;
+        return episdoe.chapters.indexOf()
+    }
 };

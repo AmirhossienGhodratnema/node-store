@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Episodes = mongoose.Schema({
+const Episodes = new mongoose.Schema({
     title: { type: String, require: true },
     description: { type: String, require: true },
     type: { type: String, defult: 'unlock' },
@@ -8,9 +8,16 @@ const Episodes = mongoose.Schema({
     video: { type: String, defult: '' },
     chapter: { type: mongoose.Types.ObjectId, require: true },
     course: { type: mongoose.Types.ObjectId, require: true },
+}, { toJSON: { virtuals: true } });
+Episodes.virtual('videoUrl').get(function () {
+    return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.video}`
 });
 
-const Chapter = mongoose.Schema({
+// BASE_URL = http://localhost:
+// SERVER_PORT = 8000
+
+
+const Chapter = new mongoose.Schema({
     title: { type: String, require: true },
     description: { type: String, defult: '' },
     episodes: { type: [Episodes], defult: [] },
@@ -41,6 +48,10 @@ const Schema = new mongoose.Schema({
     students: { type: [mongoose.Types.ObjectId], ref: 'User', defult: [] }
 }, { toJSON: { virtuals: true } });
 
+
+Schema.virtual('imageUrl').get(function () {
+    return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
+})
 Schema.index({ title: 'text', shortText: 'text', shortDescription: 'text', description: 'text' });
 
 

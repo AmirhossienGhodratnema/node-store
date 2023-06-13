@@ -29,9 +29,12 @@ const Schema = new mongoose.Schema({
     format: { type: String },
     supplier: { type: mongoose.Types.ObjectId, require: true },
     features: { type: Features, default: [] },
-});
+}, { toJSON: { virtuals: true } });
 
-
+Schema.virtual('imageUrl').get(function () {
+    return this.images.map(image => `${process.env.BASE_URL}${process.env.SERVER_PORT}/${image}`)
+    // return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
+})
 Schema.index({ title: 'text', shortText: 'text', shortDescription: 'text', description: 'text' });
 
 module.exports = {
