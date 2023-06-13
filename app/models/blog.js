@@ -22,6 +22,9 @@ const Schema = new mongoose.Schema({
     bookMarks: { type: [mongoose.Types.ObjectId], ref: 'User', default: [] },
 }, { timestamps: true, versionKey: false, toJSON: { virtuals: true, versionKey: false } });
 
+Schema.virtual('imageUrl').get(function () {
+    return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
+})
 
 module.exports = {
     Blog: mongoose.model('Blog', Schema)
