@@ -12,6 +12,7 @@ const { videoUpload } = require('../../../../utils/upload');
 
 
 router.post('/create', videoUpload.single('video'), create(), EpisodeController.create);
+router.delete('/remove/:id', EpisodeController.remove);
 
 
 
