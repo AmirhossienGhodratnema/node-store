@@ -1,7 +1,9 @@
 const { StatusCodes } = require("http-status-codes");
 const Controller = require("../../../controller");
 const { Course } = require("../../../../models/course");
-const { fileUploadSingle, createError, ValidationData, unlinkPhoto, checkMongoId } = require("../../../../../functions/golobal");
+const { fileUploadSingle, createError, ValidationData, unlinkPhoto, checkMongoId, deleteInvalidPropertyInObject } = require("../../../../../functions/golobal");
+const path = require('path');
+const fs = require('fs');
 
 const AllowedList = [    // Allowed fields.
     'image',
@@ -30,7 +32,7 @@ module.exports = new class CourseController extends Controller {
             if (search) {
                 course = await Course.find({ $text: { $search: search } }).populate([
                     { path: 'teacher', select: { phone: 1, email: 1, firstName: 1, lastName: 1 } },
-                    { path: 'category'}
+                    { path: 'category' }
                 ]);
                 return res.status(StatusCodes.OK).json({
                     status: StatusCodes.OK,
@@ -41,7 +43,7 @@ module.exports = new class CourseController extends Controller {
             } else {
                 course = await Course.find({}).populate([
                     { path: 'teacher', select: { phone: 1, email: 1, firstName: 1, lastName: 1 } },
-                    { path: 'category'}
+                    { path: 'category' }
                 ]);
                 return res.status(StatusCodes.OK).json({
                     status: StatusCodes.OK,
@@ -99,6 +101,41 @@ module.exports = new class CourseController extends Controller {
         };
     };
 
+
+    async edit(req, res, next) {
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            await ValidationData(req);    // Validation data and throw error.
+            const course = await Course.findById(id);
+            if (!course) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no course');
+            const { fileUploadPath, filename } = req.body;
+
+
+
+            const blackList = ['teacher', 'chapters', 'time', 'discount', 'disLikes', 'creator', 'likes', 'comments',];
+            const mainFields = ['title', 'shortText', 'shortDescription', 'description', 'type', 'price', 'status', 'fileUploadPath', 'filename', 'category'];
+            await deleteInvalidPropertyInObject(data, blackList, mainFields);
+            if (fileUploadPath, filename) {
+                data.image = path.join(fileUploadPath, filename).replace(/\\/g, '/');
+                if (course.image) {
+                    fs.unlinkSync(path.join(__dirname, '..', '..', '..', '..', '..', 'public', course.image));
+                };
+            };
+
+            console.log('data', data)
+            const result = await Course.updateOne({ '_id': id }, { $set: data });
+            if (result.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR.OK, '')    // Error course not updated.
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Course update...',
+                course
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
 
     /* ---------- Options ---------- */
 
