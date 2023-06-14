@@ -7,6 +7,7 @@ const { product } = require('./product/product');
 const { course } = require('./course/course');
 const { episode } = require('./course/episode');
 const { user } = require('./user/user');
+const { role } = require('./role/role');
 
 
 router.use('/category', category);
@@ -15,6 +16,7 @@ router.use('/product', product);
 router.use('/course', course);
 router.use('/episode', episode);
 router.use('/user', user);
+router.use('/role', role);
 
 
 
