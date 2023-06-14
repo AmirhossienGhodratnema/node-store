@@ -7,8 +7,8 @@ const PermissionController = require('../../../../controller/api/admin/RGAB/perm
 // Validation
 const { create } = require('./.../../../../../../validation/admin/permissionValidation')
 
-
-router.post('/', create(), PermissionController.create);
+router.get('/', PermissionController.index);
+router.post('/create', create(), PermissionController.create);
 
 
 module.exports = {
