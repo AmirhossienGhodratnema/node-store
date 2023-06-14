@@ -8,6 +8,7 @@ const { course } = require('./course/course');
 const { episode } = require('./course/episode');
 const { user } = require('./user/user');
 const { role } = require('./role/role');
+const { permission } = require('./permission/permission');
 
 
 router.use('/category', category);
@@ -17,6 +18,7 @@ router.use('/course', course);
 router.use('/episode', episode);
 router.use('/user', user);
 router.use('/role', role);
+router.use('/permission', permission);
 
 
 

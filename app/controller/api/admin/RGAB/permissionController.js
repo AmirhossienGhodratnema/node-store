@@ -11,8 +11,8 @@ module.exports = new class PermissionController extends Controller {
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED,
                 success: true,
-                message: 'Permissio'
-            })
+                message: 'Permission created'
+            });
         } catch (error) {
             next(error);
         };
