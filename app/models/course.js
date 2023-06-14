@@ -40,7 +40,7 @@ const Schema = new mongoose.Schema({
     price: { type: Number, defult: 0 },
     discount: { type: Number, default: 0 },
     type: { type: String, defult: 'free', require: true },    // free, vip, cash
-    time: { type: String, defult: '00:00' },
+    time: { type: String, defult: '00:00:00' },
     status: { type: String, defult: 'holding' },    // holding, complated, noStart
     format: { type: String },
     teacher: { type: mongoose.Types.ObjectId, ref: 'User', require: true },

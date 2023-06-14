@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const Controller = require("../../../controller");
-const { ValidationData, uniqueTitle, deleteInvalidPropertyInObject, unlinkPhoto, createError, checkMongoId } = require("../../../../../functions/golobal");
+const { ValidationData, uniqueTitle, deleteInvalidPropertyInObject, unlinkPhoto, createError, checkMongoId, getTimeOfCourse } = require("../../../../../functions/golobal");
 const { Course } = require('./../../../../models/course');
 const { getVideoDurationInSeconds } = require('get-video-duration')
 const path = require('path');
@@ -78,8 +78,14 @@ module.exports = new class EpisodeController extends Controller {
             const { filename, fileUploadPath } = req.body;
             await ValidationData(req);    // Data fields validation.
             // const test = await this.getEpisode(id);
+            const episode = await Course.findOne({ 'chapters.episodes._id': id });    // Gettin the episode for its authenticity.
+            const fulTime = await getTimeOfCourse(episode.chapters)
+            const updateTimeEpisode = await Course.updateOne({ 'chapters.episodes._id': id }, { $set: { time: fulTime } });    // Gettin the episode for its authenticity.
 
-
+            return res.json({
+                episdoe: 'Get full time course',
+                episode,
+            })
             if (filename && fileUploadPath) {
                 const videoAddres = path.join(fileUploadPath, filename).replace(/\\/g, '/');    // Create the url of the video.
                 const videoUrl = `${process.env.BASE_URL}${process.env.SERVER_PORT}/${videoAddres}`;    // Getttin the complete video address.

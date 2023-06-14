@@ -123,7 +123,6 @@ module.exports = new class CourseController extends Controller {
                 };
             };
 
-            console.log('data', data)
             const result = await Course.updateOne({ '_id': id }, { $set: data });
             if (result.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR.OK, '')    // Error course not updated.
             return res.status(StatusCodes.OK).json({
