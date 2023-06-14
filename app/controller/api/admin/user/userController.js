@@ -1,4 +1,4 @@
-const { createError } = require("../../../../../functions/golobal");
+const { createError, deleteInvalidPropertyInObject } = require("../../../../../functions/golobal");
 const { User } = require("../../../../models/user");
 const Controller = require("../../../controller");
 const { StatusCodes } = require("http-status-codes");
@@ -19,6 +19,31 @@ module.exports = new class UserController extends Controller {
                 success: true,
                 user
             })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+
+    async userUpdate(req, res, next) {
+        try {
+            const userId = req.user._id;    // Get user.
+            const data = req.body;    // Getting data from body.
+
+
+            const blackList = ['password', 'otp', 'courses', 'bills', 'disCount', 'rols'];
+            const mainList = ['firstName', 'lastName', 'phone', 'userName', 'email'];
+            await deleteInvalidPropertyInObject(data, blackList, mainList);
+
+            const user = await User.updateOne({ '_id': userId }, {    // Update user
+                $set: data
+            });
+            if (user.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Update failed')    // Error
+            return res.json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Update user profile'
+            });
         } catch (error) {
             next(error);
         };

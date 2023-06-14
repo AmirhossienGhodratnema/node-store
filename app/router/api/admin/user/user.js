@@ -6,6 +6,7 @@ const UserController = require('../../../../controller/api/admin/user/userContro
 
 
 router.get('/getAll', UserController.index);
+router.patch('/updateProfile', UserController.userUpdate);
 
 
 
