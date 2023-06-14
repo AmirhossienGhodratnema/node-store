@@ -7,7 +7,7 @@ const RoleController = require('../../../../controller/api/admin/RGAB/roleContro
 
 
 
-router.get('/', RoleController.create);
+router.post('/', RoleController.create);
 
 
 module.exports = {
