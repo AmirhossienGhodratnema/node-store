@@ -28,9 +28,7 @@ module.exports = new class PermissionController extends Controller {
             await ValidationData(req);
             await deleteInvalidPropertyInObject(req.body, ['_id'], ['title', 'description']);
             const resultPermission = await this.checkPermissionDublicate(req.body.title);
-      
             const create = await Permission.create({ title: resultPermission, description });
-            console.log('Create', create);
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED,
                 success: true,
@@ -42,12 +40,13 @@ module.exports = new class PermissionController extends Controller {
         };
     };
 
+ 
+
 
 
     async checkPermissionDublicate(title) {
         let resutlTitle = title.replace(' ', '#');
         const permission = await Permission.findOne({ title: resutlTitle });
-        console.log(resutlTitle)
         if (permission) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Permission dublicated');
         return resutlTitle;
     }
