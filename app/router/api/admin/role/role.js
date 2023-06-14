@@ -10,6 +10,7 @@ const { create } = require('./../../../../validation/admin/roleValidation');
 
 router.get('/getList', RoleController.getList);
 router.post('/create', create(), RoleController.create);
+router.get('/remove', RoleController.remove);
 
 
 module.exports = {

@@ -11,9 +11,7 @@ module.exports = new class RoleController extends Controller {
 
     async getList(req, res, next) {
         try {
-            const role = await Role.find({}).populate([
-                { path: 'permissions' }
-            ]);
+            const role = await Role.find({})
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
                 success: true,
@@ -36,6 +34,24 @@ module.exports = new class RoleController extends Controller {
                 status: StatusCodes.CREATED,
                 success: true,
                 message: 'Role created',
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+
+    async remove(req, res, next) {
+        try {
+            const { id } = req.query;
+            const role = await Role.findById(id);
+            if (!role) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Role not defind');
+            const removeRole = await Role.deleteOne({ '_id': id });
+            if (removeRole.deletedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'The roll was not deleted');
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                status: StatusCodes.INTERNAL_SERVER_ERROR,
+                success: true,
+                message: 'Remove role ok',
             })
         } catch (error) {
             next(error);
