@@ -9,6 +9,7 @@ const { create } = require('./.../../../../../../validation/admin/permissionVali
 
 router.get('/', PermissionController.index);
 router.post('/create', create(), PermissionController.create);
+router.post('/remove/:id', PermissionController.remove);
 
 
 module.exports = {

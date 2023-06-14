@@ -40,7 +40,23 @@ module.exports = new class PermissionController extends Controller {
         };
     };
 
- 
+    async remove(req, res, next) {
+        try {
+            const { id } = req.params;
+            const permisssion = await Permission.findOne({ '_id': id });
+            if (!permisssion) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Role not defind');
+            const permissionRemove = await Permission.deleteOne({ '_id': id });
+            if (permissionRemove.deletedCount == 0) await createError({ status: StatusCodes.INTERNAL_SERVER_ERROR, message: 'The permission was not deleted' });
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'The permission was deleted'
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
 
 
 

@@ -51,7 +51,7 @@ module.exports = new class RoleController extends Controller {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 status: StatusCodes.INTERNAL_SERVER_ERROR,
                 success: true,
-                message: 'Remove role ok',
+                message: 'The roll was deleted',
             })
         } catch (error) {
             next(error);
