@@ -9,7 +9,10 @@ const { StatusCodes } = require("http-status-codes");
 module.exports = new class UserController extends Controller {
     async index(req, res, next) {
         try {
-            const user = await User.find({});    // Gettin all user.
+            const { search } = req.query;
+            let dbQuery = {}
+            if (search) dbQuery['$text'] = { $search: search };
+            const user = await User.find(dbQuery);    // Gettin all user.
             if (!user) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'User is not defind');    // Error not user
             return res.json({
                 status: StatusCodes.OK,

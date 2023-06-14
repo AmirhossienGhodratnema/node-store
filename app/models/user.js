@@ -20,6 +20,7 @@ const Schema = new mongoose.Schema({
     rols: { type: [], defult: ['USER'] },
 }, { toJSON: { virtuals: true, versionKey: false } });
 
+Schema.index({ firstName: 'text', lastName: 'text', userName: 'text', phone: 'text', email: 'text' });
 
 module.exports = {
     User: mongoose.model('User', Schema)
