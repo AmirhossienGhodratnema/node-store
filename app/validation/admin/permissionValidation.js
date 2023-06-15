@@ -13,6 +13,17 @@ const create = () => {
     ]
 };
 
+const edit = () => {
+    return [
+        check('title')
+            .notEmpty().withMessage('title require'),
+
+        check('description')
+            .notEmpty().withMessage('permissions require - Array'),
+
+    ]
+};
 
 
-module.exports = { create };
+
+module.exports = { create, edit };

@@ -40,6 +40,25 @@ module.exports = new class PermissionController extends Controller {
         };
     };
 
+
+    async edit(req, res, next) {
+        try {
+            const { id } = req.params;
+            await ValidationData(req);
+            const permission = await Permission.findOne({ '_id': id });
+            if (!permission) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'There is no permission')
+            const updatePermission = await Permission.updateOne({ '_id': id }, { $set: req.body });
+            if (updatePermission.modifiedCount == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Permission was not updated');
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Permission was updated',
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
+
     async remove(req, res, next) {
         try {
             const { id } = req.params;

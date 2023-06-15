@@ -24,11 +24,11 @@ module.exports = new class RoleController extends Controller {
 
     async create(req, res, next) {
         try {
-            const { title } = req.body;
+            const data = req.body;
             await ValidationData(req);
-            await deleteInvalidPropertyInObject(req.body, [], ['title', 'description'])
-            const checkTitle = await this.checkTitleRol(title);
-            const role = await Role.create({ title: checkTitle });
+            await deleteInvalidPropertyInObject(req.body, [], ['title', 'description', 'permissions'])
+            const checkTitle = await this.checkTitleRol(data.title);
+            const role = await Role.create({ title: checkTitle, description: data.description, permissions: data.permissions });
             console.log(role)
             return res.json({
                 status: StatusCodes.CREATED,

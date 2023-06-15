@@ -7,8 +7,9 @@ const create = () => {
         check('title')
             .notEmpty().withMessage('title require'),
 
-        check('permissions')
-            .notEmpty().withMessage('permissions require - Array'),
+        check('description')
+            .notEmpty().withMessage('description require'),
+
 
     ]
 };
