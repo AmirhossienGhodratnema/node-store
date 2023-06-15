@@ -17,6 +17,7 @@ const { role } = require('./role/role');
 const { permission } = require('./permission/permission');
 const { checkRole } = require('../../../middleware/permissionGuard');
 const gate = require('../../../middleware/gate');
+const { Gate } = require('../../../utils/constans');
 
 
 
@@ -32,8 +33,8 @@ router.use('/category', category);
 router.use('/blog', blog);
 router.use('/product', product);
 router.use('/episode', episode);
-router.use('/course', course);
-router.use('/user', gate.can('COURSEs'), user);
+router.use('/course', gate.can(Gate.COURSE), course);
+router.use('/user', user);
 router.use('/role', role);
 router.use('/permission', permission);
 

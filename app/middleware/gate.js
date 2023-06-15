@@ -4,6 +4,7 @@ const { StatusCodes } = require('http-status-codes');
 const { Category } = require('../models/categorys');
 const { Role } = require('../models/role');
 const { User } = require('../models/user');
+const testSS = require('./../models/user')
 const permission = require('../models/permission');
 
 let gate = new ConnectRoles({
@@ -58,6 +59,9 @@ let gate = new ConnectRoles({
 // if (result == true) return true;
 
 // })
+
+
+
 
 
 const permissions = async () => {
