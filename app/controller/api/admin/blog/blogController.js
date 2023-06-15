@@ -20,7 +20,6 @@ module.exports = new class BlogController extends Controller {
             let { title, category, text, shortText, tag, image } = req.body;    // Getting the fields to create a blog.
             const author = req.user
             const blog = await Blog.create({ author, title, category, text, shortText, tag, image });    // Create blog in DB
-            console.log('author', author)
             return res.status(201).json({
                 status: 201,
                 success: true,

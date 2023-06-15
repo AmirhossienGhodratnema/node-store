@@ -17,7 +17,7 @@ const Schema = new mongoose.Schema({
     bills: { type: [], default: [] },
     disCount: { type: Number, default: 0 },
     birthday: { type: String },
-    rols: { type: [], defult: ['USER'] },
+    role: { type: mongoose.Types.ObjectId, ref: 'Role', defult: '' },
 }, { toJSON: { virtuals: true, versionKey: false } });
 
 Schema.index({ firstName: 'text', lastName: 'text', userName: 'text', phone: 'text', email: 'text' });

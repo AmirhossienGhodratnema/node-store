@@ -15,9 +15,9 @@ const { chckRole } = require('./../../middleware/access');
 
 router.use('/', indexPage);
 router.use('/user', userRouters);
-router.use('/admin', verifyToken, chckRole('ADMIN'), AdminRouter);
+router.use('/admin', verifyToken, AdminRouter);
 
-
+// chckRole('ADMIN')
 router.use('/developer', developerRoute);
 
 

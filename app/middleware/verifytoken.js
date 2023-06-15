@@ -8,7 +8,12 @@ async function verifyToken(req, res, next) {
         let token = req.body.token || req.query.token || req.headers.token;
         if (token) {
             let tokenVerify = await jwt.verify(token, process.env.JSON_WEBTOKEN_SECURECODE);
-            const user = await User.findOne({ phone: tokenVerify.phone }, { password: 0, otp: 0, });
+            const user = await User.findOne({ phone: tokenVerify.phone }, { password: 0, otp: 0, }).populate([
+                {
+                    path: 'role',
+                    populate: {path : 'permissions'}
+                }
+            ]);
             if (!user) throw { status: 400, message: 'There is no user' };
             req.user = user;
             return next();

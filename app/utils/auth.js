@@ -30,7 +30,6 @@ async function saveUser(phone, code) {
     return !!(await User.create({    // Create new user.
         phone,
         otp,
-        rols: ['USER']
     }));
 };
 
@@ -69,7 +68,6 @@ async function signRefreshToken(userId) {
         if (!user) reject({ status: 400, message: 'There is no user' })
         const { phone } = user;
         let token = await sign({ phone }, process.env.JSON_WEBTOKEN_SECURECODE, { expiresIn: '365d' });
-        console.log(user.id)
         await redisClient.setEx(user.id, 31536000, token);
         resolve(token);
     });

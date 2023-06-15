@@ -1,5 +1,11 @@
 const router = require('express').Router();
 
+
+
+
+var ConnectRoles = require('connect-roles');
+
+
 // Admin router
 const { category } = require('./category/category');
 const { blog } = require('./blog/blog');
@@ -9,14 +15,25 @@ const { episode } = require('./course/episode');
 const { user } = require('./user/user');
 const { role } = require('./role/role');
 const { permission } = require('./permission/permission');
+const { checkRole } = require('../../../middleware/permissionGuard');
+const gate = require('../../../middleware/gate');
+
+
+
+
+
+
+
+
+
 
 
 router.use('/category', category);
 router.use('/blog', blog);
 router.use('/product', product);
-router.use('/course', course);
 router.use('/episode', episode);
-router.use('/user', user);
+router.use('/course', course);
+router.use('/user', gate.can('COURSEs'), user);
 router.use('/role', role);
 router.use('/permission', permission);
 

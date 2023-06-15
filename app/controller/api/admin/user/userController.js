@@ -10,6 +10,7 @@ module.exports = new class UserController extends Controller {
     async index(req, res, next) {
         try {
             const { search } = req.query;
+            return res.json(req.user)
             let dbQuery = {}
             if (search) dbQuery['$text'] = { $search: search };
             const user = await User.find(dbQuery);    // Gettin all user.
@@ -30,7 +31,6 @@ module.exports = new class UserController extends Controller {
             const userId = req.user._id;    // Get user.
             const data = req.body;    // Getting data from body.
 
-
             const blackList = ['password', 'otp', 'courses', 'bills', 'disCount', 'rols'];
             const mainList = ['firstName', 'lastName', 'phone', 'userName', 'email'];
             await deleteInvalidPropertyInObject(data, blackList, mainList);
@@ -44,6 +44,25 @@ module.exports = new class UserController extends Controller {
                 success: true,
                 message: 'Update user profile'
             });
+        } catch (error) {
+            next(error);
+        };
+    };
+
+
+    async addRole(req, res, next) {
+        try {
+            const { userID, role } = req.body;
+            const user = await User.findOne({ '_id': userID });
+            if (!user) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'User not found');
+            const updateUser = await User.updateOne({ '_id': userID }, { $set: { role } });
+            if (updateUser.modifiedCount == 0) createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Role not update');
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                success: true,
+                message: 'Add role',
+                updateUser
+            })
         } catch (error) {
             next(error);
         };
