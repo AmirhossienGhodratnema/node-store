@@ -75,7 +75,6 @@ permissions()
             gate.use(function (req, action) {
                 const permissions = req.user.role.permissions;
                 const titleArr = permissions.map(item => item.title);
-                console.log(titleArr)
                 if (titleArr.includes(action)) return true
             })
 
