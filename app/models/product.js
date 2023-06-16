@@ -17,7 +17,7 @@ const Schema = new mongoose.Schema({
     description: { type: String, require: true, toLower: true },
     images: { type: [String], require: true },
     tags: { type: [String], defult: [] },
-    category: { type: [mongoose.Types.ObjectId], ref: 'category', require: true },
+    category: { type: [mongoose.Types.ObjectId], ref: 'Category', require: true },
     comments: { type: [], defult: [] },
     likes: { type: [mongoose.Types.ObjectId], defult: [] },
     disLikes: { type: [mongoose.Types.ObjectId], defult: [] },
@@ -27,7 +27,7 @@ const Schema = new mongoose.Schema({
     type: { type: String, require: true },
     delete: { type: Boolean, require: true, default: false },
     format: { type: String },
-    supplier: { type: mongoose.Types.ObjectId, require: true },
+    supplier: { type: mongoose.Types.ObjectId,ref:'User', require: true },
     features: { type: Features, default: [] },
 }, { toJSON: { virtuals: true } });
 

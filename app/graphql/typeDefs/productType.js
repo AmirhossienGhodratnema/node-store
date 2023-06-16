@@ -1,4 +1,5 @@
-const { GraphQLObjectType, GraphQLString, GraphQLList } = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLInputObjectType } = require("graphql");
+const { CategoryType, AuthorType } = require("./public.type");
 
 
 
@@ -29,11 +30,11 @@ const ProductType = new GraphQLObjectType({
         description: { type: GraphQLString },
         images: { type: new GraphQLList(GraphQLString) },
         tags: { type: new GraphQLList(GraphQLString) },
-        category: { type: new GraphQLList(GraphQLString) },
+        category: { type:  new GraphQLList(CategoryType) },
         price: { type: GraphQLString },
-        supplier: { type: GraphQLString },
-        title: { type: GraphQLString },
-        features: { type: new GraphQLList(Features) },
+        supplier: { type: AuthorType },
+        features: { type: Features},
+        imageUrl: { type: new GraphQLList(GraphQLString)},
     }
 });
 
