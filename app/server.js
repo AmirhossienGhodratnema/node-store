@@ -3,13 +3,10 @@ const cookieParser = require('cookie-parser');
 // My require
 const { errorHandler, notFoundError } = require('./errors/errorHandlers');
 const { AllRoutesApi } = require('./router/api/router');
-const { AllRoutesWeb } = require('./router/web/router');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const cors = require('cors');
-const { redisClient } = require('./utils/init_redis');
-const colors = require('colors');
 
 module.exports = class Application {
 
@@ -33,7 +30,7 @@ module.exports = class Application {
 
         // Opitons config.
         this.#app.use(cors());
-        this.#app.use(morgan('dev'));    // Loger
+        // this.#app.use(morgan('dev'));    // Loger
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
         this.#app.use(this.#express.static(path.join(__dirname, '../public')));    // Set static files.

@@ -31,7 +31,6 @@ module.exports = new class RoleController extends Controller {
             await deleteInvalidPropertyInObject(req.body, [], ['title', 'description', 'permissions'])
             const checkTitle = await this.checkTitleRol(data.title);
             const role = await Role.create({ title: checkTitle, description: data.description, permissions: data.permissions });
-            console.log(role)
             return res.json({
                 status: StatusCodes.CREATED,
                 success: true,

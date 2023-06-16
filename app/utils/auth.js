@@ -13,7 +13,6 @@ async function randomNumber() {
 
 async function saveUser(phone, code) {
     const dateEXP = new Date().getTime() + 120000;
-    console.log(dateEXP, new Date().getTime())
     let otp = {    // Create otp for user
         code,
         expireIn: dateEXP

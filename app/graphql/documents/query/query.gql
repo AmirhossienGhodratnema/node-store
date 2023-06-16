@@ -1,0 +1,16 @@
+{
+  blog {
+    title,
+  	text,
+    author {
+      _id,
+    },
+		image,
+    shortText,
+    tag,
+    category {
+      _id
+      title
+    }
+  }
+}

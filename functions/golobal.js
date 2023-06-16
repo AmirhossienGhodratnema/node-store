@@ -69,7 +69,7 @@ async function uniqueTitle(model) {
     // let result = await data.replace(' ', '#');    // Replace ' ' with '#' for check unieq title. 
     model.chapters.map(item => {    // Push title in chaptersList.
         // chaptersList.push(chapter.title)
-        console.log(item)
+        // console.log(item)
     });
 
 };
