@@ -3,6 +3,7 @@ const { GraphQLObjectType, GraphQLSchema } = require('graphql');
 const { ProductResolver } = require('./queries/product.Resolver');
 const { BlogResolver } = require('./queries/blog.resolver');
 const { CategoryResolver, CategoryChildResolver } = require('./queries/category.resolver');
+const { CourseResolver } = require('./queries/course.resolver');
 
 const rootQuery = new GraphQLObjectType({
     name: 'RootQuery',
@@ -11,6 +12,7 @@ const rootQuery = new GraphQLObjectType({
         product: ProductResolver,
         category: CategoryResolver,
         categoryParent: CategoryChildResolver,
+        courses: CourseResolver,
     }
 });
 

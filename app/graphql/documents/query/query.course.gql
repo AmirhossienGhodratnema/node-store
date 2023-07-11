@@ -1,0 +1,29 @@
+{{
+  courses{
+    title
+    imageUrl
+    shortText
+    shortDescription
+    description
+    image
+    tags
+    price
+    discount
+    type
+    time
+    status
+    chapters {
+      _id
+      title
+      description
+      episodes {
+        _id
+        title
+        type
+        time
+        video
+        description
+      }
+    }
+  }
+}
