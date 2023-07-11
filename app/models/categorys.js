@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = new mongoose.Schema({
     title: { type: String, require: true, unique: true },
-    parent: { type: mongoose.Types.ObjectId, ref: 'Category', default: undefined },
+    parent: { type: [mongoose.Types.ObjectId], ref: 'category', default: undefined },
 }, {
     toJSON: {
         virtuals: true,

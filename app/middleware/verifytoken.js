@@ -11,7 +11,7 @@ async function verifyToken(req, res, next) {
             const user = await User.findOne({ phone: tokenVerify.phone }, { password: 0, otp: 0, }).populate([
                 {
                     path: 'role',
-                    populate: {path : 'permissions'}
+                    populate: { path: 'permissions' }
                 }
             ]);
             if (!user) throw { status: 400, message: 'There is no user' };
@@ -41,7 +41,37 @@ async function verifyRefreshToken(token) {
 
 
 
+async function verifyTokenGraphQl(req, res) {
+    try {
+        let token = req.body.token || req.query.token || req.headers.token;
+        if (token) {
+            try {
+                let tokenVerify = await jwt.verify(token, process.env.JSON_WEBTOKEN_SECURECODE);
+                const user = await User.findOne({ phone: tokenVerify.phone }, { password: 0, otp: 0, }).populate([
+                    {
+                        path: 'role',
+                        populate: { path: 'permissions' }
+                    }
+                ]);
+                if (!user) throw { status: 400, message: 2 };
+                req.user = user;
+                return req.user
+            } catch (error) {
+                req.error = error
+            }
+        };
+        throw { status: 400, message: 1 }
+    } catch (error) {
+        if(error.message == 1) throw new Error('Token is not defind');
+        if(error.message == 2) throw new Error('There is no user');
+        throw { status: 400, message: 'errrrrrrrrrrrrrrrrorr' }
+    };
+};
+
+
+
 module.exports = {
     verifyToken,
-    verifyRefreshToken
+    verifyRefreshToken,
+    verifyTokenGraphQl
 }
