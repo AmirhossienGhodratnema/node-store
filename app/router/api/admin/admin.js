@@ -20,24 +20,17 @@ const gate = require('../../../middleware/gate');
 const { Gate } = require('../../../utils/constans');
 
 
-
-
-
-
-
-
-
+// , gate.can(Gate.COURSE)   // Access
 
 
 router.use('/category', category);
 router.use('/blog', blog);
 router.use('/product', product);
 router.use('/episode', episode);
-router.use('/course', gate.can(Gate.COURSE), course);
+router.use('/course', course);
 router.use('/user', user);
 router.use('/role', role);
 router.use('/permission', permission);
-
 
 
 router.get('/', (req, res, next) => {
