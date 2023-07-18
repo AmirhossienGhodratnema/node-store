@@ -16,7 +16,7 @@ const Schema = new mongoose.Schema({
     image: { type: String, require: true },
     tag: { type: [String], default: [] },
     category: { type: [mongoose.Types.ObjectId], ref: 'Category', require: true },
-    comments: { type: [CommentSchema], default: [] },
+    comments: { type: [CommentSchema], ref:'Comment', default: [] },
     likes: { type: [mongoose.Types.ObjectId], ref: 'User', default: [] },
     disLikes: { type: [mongoose.Types.ObjectId], ref: 'User', default: [] },
     bookMarks: { type: [mongoose.Types.ObjectId], ref: 'User', default: [] },
@@ -25,6 +25,8 @@ const Schema = new mongoose.Schema({
 Schema.virtual('imageUrl').get(function () {
     return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
 })
+
+
 
 module.exports = {
     Blog: mongoose.model('Blog', Schema)

@@ -27,9 +27,18 @@ async function checkMongoId(id) {
     }
 }
 
+async function checkMongoIdGraphQl(id) {
+if (!validator.isMongoId(id)) throw new Error('MongoID is wrong');
+};
+
 async function createError(statusCode, message) {
     throw { status: statusCode, message: message };
 }
+
+async function createErrorGraphQl(message) {
+    throw new Error(message);
+}
+
 
 
 
@@ -111,5 +120,7 @@ module.exports = {
     ValidationData,
     deleteInvalidPropertyInObject,
     uniqueTitle,
-    getTimeOfCourse
-}
+    getTimeOfCourse,
+    checkMongoIdGraphQl,
+    createErrorGraphQl
+};

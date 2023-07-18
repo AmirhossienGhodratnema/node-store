@@ -6,7 +6,8 @@ const Schema = new mongoose.Schema({
     comment: { type: String, require: true },
     show: { type: Boolean, default: false },
     openToComment: { type: Boolean, default: true },
-    parent: { type: mongoose.Types.ObjectId, ref: 'Comment' },
+    parent: { type: mongoose.Types.ObjectId, ref: 'Comment', default: undefined },
+    blogID: { type: mongoose.Types.ObjectId, ref: 'Comment' },
 }, { toJSON: { virtuals: true } });
 
 

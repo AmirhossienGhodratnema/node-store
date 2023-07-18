@@ -1,6 +1,14 @@
 const { GraphQLObjectType, GraphQLString, GraphQLScalarType, Kind } = require("graphql");
 const { toObject, parseLiteral } = require("../utils/utils");
 
+const AnyType = new GraphQLScalarType({
+    name: "anyType",
+    parseValue: toObject,
+    serialize: toObject,
+    parseLiteral: parseLiteral,
+})
+
+
 
 
 const AuthorType = new GraphQLObjectType({
@@ -21,22 +29,14 @@ const CategoryType = new GraphQLObjectType({
 });
 
 
-const AnyType = new GraphQLScalarType({
-    name: 'anyType',
-    parseValue: toObject,
-    serialize: toObject,
-    parseLiteral: parseLiteral,
-});
-
-
 
 const ResponseType = new GraphQLObjectType({
-    name: 'responseType',
-    fields: {
+    name: "responseType",
+    fields : {
         status: { type: GraphQLString },
         data: { type: AnyType },
     }
-});
+})
 
 
 
