@@ -1,4 +1,5 @@
-const { GraphQLObjectType, GraphQLString } = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLScalarType, Kind } = require("graphql");
+const { toObject, parseLiteral } = require("../utils/utils");
 
 
 
@@ -20,7 +21,19 @@ const CategoryType = new GraphQLObjectType({
 });
 
 
+const AnyType = new GraphQLScalarType({
+    name: 'anyType',
+    parseValue: toObject,
+    serialize: toObject,
+    parseLiteral: parseLiteral,
+});
+
+
+
+
+
 module.exports = {
     AuthorType,
-    CategoryType
+    CategoryType,
+    AnyType
 };

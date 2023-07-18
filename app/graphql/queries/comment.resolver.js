@@ -18,7 +18,7 @@ const CommentForBlogResolver = {
 
         const { comment, blogID, parent } = args;
         console.log({comment, blogID});
-        return { comment, blogID, parent };
+        return { comment, blogID };
 
         // const { req, res } = context
         // const user = await verifyTokenGraphQl(req, res);

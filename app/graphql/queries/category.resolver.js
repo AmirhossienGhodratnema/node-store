@@ -18,7 +18,6 @@ const CategoryChildResolver = {
     },
     resolve: async (_, args) => {
         const { parent } = args;
-        console.log(args)
         return await Category.find({parent});
     }
 };
