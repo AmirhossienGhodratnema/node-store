@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLBoolean } = require("graphql");
-const { AuthorType, CategoryType } = require("./public.type");
+const { AuthorType, CategoryType, AnyType } = require("./public.type");
 
 const ParentType = new GraphQLObjectType({
     name: 'parentType',
@@ -23,6 +23,7 @@ const CommentType = new GraphQLObjectType({
         parent: { type: new GraphQLList(ParentType) },
     }
 });
+
 
 
 module.exports = { CommentType };

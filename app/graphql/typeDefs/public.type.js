@@ -30,10 +30,19 @@ const AnyType = new GraphQLScalarType({
 
 
 
+const ResponseType = new GraphQLObjectType({
+    name: 'responseType',
+    fields: {
+        status: { type: GraphQLString },
+        data: { type: AnyType },
+    }
+});
+
 
 
 module.exports = {
     AuthorType,
     CategoryType,
-    AnyType
+    AnyType,
+    ResponseType,
 };

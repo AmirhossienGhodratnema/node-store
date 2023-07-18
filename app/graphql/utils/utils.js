@@ -47,6 +47,7 @@ function parseLiteral(valueNode) {    // valueNode: Strange amounts. fields,name
 
 
 function toObject(value) {
+    console.log(value)
     if (typeof value === Object) return value;
     if (typeof value === String && value.charAt(0) == '{') return JSON.parse(value);
     return null;
