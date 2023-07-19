@@ -34,6 +34,22 @@ module.exports = new class BlogController extends Controller {
         };
     };
 
+    async test(req, res, next) {
+        try {
+            const blog = await Blog.find({}).populate([
+                {
+                    path: 'CommentBlog',
+                    populate: [
+                        { path: 'user' },
+                        { path: 'parent.user' }
+                    ]
+                },
+            ]).exec()
+            return res.json(blog)
+        } catch (error) {
+            next(error);
+        };
+    };
 
     async getAllBlogs(req, res, next) {
         try {

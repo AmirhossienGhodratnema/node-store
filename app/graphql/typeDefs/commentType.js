@@ -4,9 +4,10 @@ const { AuthorType, CategoryType, AnyType } = require("./public.type");
 const ParentType = new GraphQLObjectType({
     name: 'parentType',
     fields: {
-        author: { type: AuthorType },
+        user: { type: AuthorType },
         comment: { type: GraphQLString },
         show: { type: GraphQLBoolean },
+        createdAt: { type: GraphQLString },
         openToComment: { type: GraphQLBoolean },
         parent: { type: new GraphQLList(GraphQLString) },
         category: { type: new GraphQLList(CategoryType) },
@@ -16,7 +17,7 @@ const ParentType = new GraphQLObjectType({
 const CommentType = new GraphQLObjectType({
     name: 'commentType',
     fields: {
-        author: { type: AuthorType },
+        user: { type: AuthorType },
         comment: { type: GraphQLString },
         show: { type: GraphQLBoolean },
         openToComment: { type: GraphQLBoolean },

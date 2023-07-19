@@ -12,6 +12,7 @@ const { create } = require('./../../../../validation/admin/blogValidation')
 
 
 router.post('/create', uploadFile.single('image'), create(), BlogController.create);
+router.get('/test' ,BlogController.test);
 router.get('/getAllBlogs', BlogController.getAllBlogs);
 router.get('/:id', BlogController.getBlogId);
 router.patch('/update/:id', uploadFile.single('image'), create(), BlogController.updateBlog);

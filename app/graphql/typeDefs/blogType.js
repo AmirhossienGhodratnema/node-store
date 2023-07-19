@@ -15,7 +15,7 @@ const BlogType = new GraphQLObjectType({
         image: { type: GraphQLString },
         tag: { type: new GraphQLList(GraphQLString) },
         category: { type: new GraphQLList(CategoryType) },
-        comments: { type: new GraphQLList(CommentType) },
+        CommentBlog: { type: new GraphQLList(CommentType) },
     }
 });
 
