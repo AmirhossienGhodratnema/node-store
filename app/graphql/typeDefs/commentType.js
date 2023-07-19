@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLBoolean } = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLBoolean, GraphQLInt } = require("graphql");
 const { AuthorType, CategoryType, AnyType } = require("./public.type");
 
 const ParentType = new GraphQLObjectType({
@@ -20,6 +20,7 @@ const CommentType = new GraphQLObjectType({
         comment: { type: GraphQLString },
         show: { type: GraphQLBoolean },
         openToComment: { type: GraphQLBoolean },
+        createdAt: { type: GraphQLString },
         parent: { type: new GraphQLList(ParentType) },
     }
 });

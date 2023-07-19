@@ -12,7 +12,9 @@ const BlogResolver = {
         const { req, res } = context
         const user = await verifyTokenGraphQl(req, res);
         if (!user) await createError(StatusCodes.NOT_FOUND, 'User is not found');
-        return await Blog.find({}).populate([{ path: 'author' }, { path: 'category' }]);
+        const blog = await Blog.find({}).populate([{ path: 'author' }, { path: 'category' }]);
+        console.log('blog', blog)
+        return blog;
     }
 };
 

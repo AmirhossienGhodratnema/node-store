@@ -70,6 +70,10 @@ async function signRefreshToken(userId) {
         await redisClient.setEx(user.id, 31536000, token);
         resolve(token);
     });
+};
+
+function copyObject(object) {
+    return JSON.parse(JSON.stringify(object))
 }
 
 // async function signRefreshToken(phone) {
@@ -92,5 +96,6 @@ module.exports = {
     randomNumber,
     saveUser,
     signToken,
-    signRefreshToken
+    signRefreshToken,
+    copyObject
 };
