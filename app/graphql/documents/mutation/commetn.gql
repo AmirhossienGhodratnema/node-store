@@ -1,0 +1,10 @@
+mutation {
+  CommentForBlogResolver(
+    comment:"Text comment",
+    blogID:"Blog ID",
+    parent: "Parent ID"
+  ) {
+ 		status
+    data
+  }
+}

@@ -37,6 +37,8 @@ Schema.virtual('imageUrl').get(function () {
 })
 Schema.index({ title: 'text', shortText: 'text', shortDescription: 'text', description: 'text' });
 
+Schema.virtual('CommentBlog', { ref: 'Comment', localField: '_id', foreignField: 'productID' });
+
 module.exports = {
     Product: mongoose.model('Product', Schema)
 }

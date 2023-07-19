@@ -4,13 +4,37 @@
   	text,
     author {
       _id,
+      firstName
+      lastName
     },
 		image,
     shortText,
     tag,
-    category {
+    category{
       _id
       title
+    }
+    CommentBlog{
+      comment
+      show
+      openToComment
+      createdAt
+      user{
+        _id
+        firstName
+        lastName
+      }
+      parent{
+        user{
+          _id
+				firstName
+        lastName
+        }
+      comment
+      show
+      openToComment
+      createdAt
+      }
     }
   }
 }

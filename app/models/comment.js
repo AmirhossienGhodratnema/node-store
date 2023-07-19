@@ -17,6 +17,7 @@ const Schema = new mongoose.Schema({
     openToComment: { type: Boolean, default: true },
     parent: { type: [AswerSchema], default: [] },
     blogID: { type: mongoose.Types.ObjectId, ref: 'Blog' },
+    productID: { type: mongoose.Types.ObjectId, ref: 'Product' },
 }, { timestamps: true })
 
 

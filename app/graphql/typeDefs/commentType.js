@@ -17,6 +17,7 @@ const ParentType = new GraphQLObjectType({
 const CommentType = new GraphQLObjectType({
     name: 'commentType',
     fields: {
+        _id: { type: GraphQLString },
         user: { type: AuthorType },
         comment: { type: GraphQLString },
         show: { type: GraphQLBoolean },
