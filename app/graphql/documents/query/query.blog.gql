@@ -1,40 +1,42 @@
-{
-  blog {
-    title,
-  	text,
-    author {
-      _id,
-      firstName
-      lastName
-    },
-		image,
-    shortText,
-    tag,
-    category{
-      _id
+  {
+    product{
       title
-    }
-    CommentBlog{
-      comment
-      show
-      openToComment
-      createdAt
-      user{
+      shortText
+      shortDescription
+      description
+      images
+      tags
+      category {
+        _id
+        title
+      }
+      supplier {
         _id
         firstName
         lastName
       }
-      parent{
-        user{
-          _id
-				firstName
-        lastName
+      price
+      features {
+        lengths
+        height
+        height
+        weight
+        coler
+        model
+        title
+        madein
+      }
+      imageUrl
+      CommentBlog{
+        comment
+        openToComment
+        show
+        _id
+        parent{
+          comment
+          openToComment
+          show
         }
-      comment
-      show
-      openToComment
-      createdAt
       }
     }
   }
-}

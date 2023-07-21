@@ -1,0 +1,10 @@
+mutation {
+  CommentForProductResolver(
+    comment:"ُAmirhossein ghodratnema is nodejs Developer",
+    productID:"648aadd1457fd5fe389a9dca",
+    parent:"64b8400629eedd091fb65f6a"
+  ) {
+ 		status
+    data
+  }
+}

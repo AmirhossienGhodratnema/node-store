@@ -26,5 +26,17 @@
       title
       madein
     }
+    imageUrl
+    CommentBlog{
+      comment
+      openToComment
+      show
+      _id
+      parent{
+        comment
+        openToComment
+        show
+      }
+    }
   }
 }

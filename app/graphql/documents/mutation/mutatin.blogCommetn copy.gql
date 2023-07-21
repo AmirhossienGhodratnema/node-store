@@ -1,0 +1,10 @@
+mutation {
+  CommentForBlogResolver(
+    comment:"ُAmirhossein",
+    blogID:"648aadc2457fd5fe389a9dc3",
+		parent: "64b84279e2ba089a7f0c4929"
+  ) {
+ 		status
+    data
+  }
+}
