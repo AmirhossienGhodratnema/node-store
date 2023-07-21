@@ -51,6 +51,10 @@ async function verifyTokenGraphQl(req, res) {
                     {
                         path: 'role',
                         populate: { path: 'permissions' }
+                    },
+                    {
+                        path: 'basketUser',
+                        populate: [{path: 'product.product'}]
                     }
                 ]);
                 if (!user) throw { status: 400, message: 2 };

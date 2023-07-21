@@ -67,4 +67,15 @@ module.exports = new class UserController extends Controller {
             next(error);
         };
     };
+
+    async test(req, res, next) {
+        try {
+            const user = await User.find({ _id: req.user._id }).populate([
+                { path: 'basketUser', populate: [{path: 'product.product'}] }
+            ]);
+            return res.json(user)
+        } catch (error) {
+            next(error);
+        };
+    };
 };

@@ -8,6 +8,8 @@ const { PERMISSIONS } = require('../../../../utils/constans');
 
 router.get('/getAll', UserController.index);
 router.patch('/updateProfile', UserController.userUpdate);
+router.get('/test', UserController.test);
+
 
 router.put('/addRole', UserController.addRole);
 

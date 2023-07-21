@@ -18,10 +18,11 @@ const Schema = new mongoose.Schema({
     disCount: { type: Number, default: 0 },
     birthday: { type: String },
     role: { type: mongoose.Types.ObjectId, ref: 'Role', defult: '' },
-    basket: { type: [mongoose.Types.ObjectId], defult: [] },
+    basket: { type: [mongoose.Types.ObjectId], ref: 'Basket', defult: [] },
 }, { toJSON: { virtuals: true, versionKey: false } });
 
 Schema.index({ firstName: 'text', lastName: 'text', userName: 'text', phone: 'text', email: 'text' });
+Schema.virtual('basketUser', { ref: 'Basket', localField: '_id', foreignField: 'user' });
 
 
 module.exports = {
