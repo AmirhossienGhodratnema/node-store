@@ -6,7 +6,7 @@ const { checkMongoIdGraphQl } = require("../../../functions/golobal");
 const { Blog } = require("../../models/blog");
 const { Product } = require("../../models/product");
 
-const LikeForBlogResolver = {
+const bookmarkForBlogResolver = {
     type: ResponseType,
     args: {
         blogID: { type: GraphQLString },    // String type
@@ -16,25 +16,26 @@ const LikeForBlogResolver = {
         const user = await verifyTokenGraphQl(req, res);    // Check user for authauthentication.
         const { blogID } = args;    // Get data from client.
         const blog = await checkExistBlog(blogID);    // Check blog
-        const getBlog = await Blog.findOne({ _id: blogID, likes: user._id });    // Getting a blog based on blog ID and user ID
+        const getBlog = await Blog.findOne({ _id: blogID, bookMarks: user._id });    // Getting a blog based on blog ID and user ID
+        console.log('getBlog', getBlog)
         if (getBlog) {    // 
-            await Blog.updateOne({ _id: blogID, likes: user._id }, {
-                $pull: { likes: user._id }
+            await Blog.updateOne({ _id: blogID, bookMarks: user._id }, {
+                $pull: { bookMarks: user._id }
             });
             return {    // Response dislike.
                 status: StatusCodes.OK,
                 data: {
-                    message: 'Dislike',
+                    message: 'Bookmark removed',
                 }
             };
         }
         await Blog.updateOne({ _id: blogID }, {
-            $push: { likes: user._id }
+            $push: { bookMarks: user._id }
         });
         return {    // Response like.
             status: StatusCodes.CREATED,
             data: {
-                message: 'Like',
+                message: 'Bookmark added',
             }
         };
     },
@@ -53,22 +54,22 @@ const LikeForProductResolver = {
         const product = await checkExistProduct(productID);    // Check product
 
 
-        const getProduct = await Product.findOne({ _id: productID, likes: user._id });    // Getting a Product based on blog ID and user ID
-        console.log('getProduct', getProduct);
-        if (getProduct) {    // 
-            await Product.updateOne({ _id: productID }, {
-                $pull: { likes: user._id }
-            });
-            return {    // Response dislike.
-                status: StatusCodes.OK,
-                data: {
-                    message: 'Dislike',
-                }
-            };
-        }
-        await Product.updateOne({ _id: productID }, {
-            $push: { likes: user._id }
-        });
+        // const getProduct = await Product.findOne({ _id: productID, likes: user._id });    // Getting a Product based on blog ID and user ID
+        // console.log('getProduct', getProduct);
+        // if (getProduct) {    // 
+        //     await Product.updateOne({ _id: productID }, {
+        //         $pull: { likes: user._id }
+        //     });
+        //     return {    // Response dislike.
+        //         status: StatusCodes.OK,
+        //         data: {
+        //             message: 'Dislike',
+        //         }
+        //     };
+        // }
+        // await Product.updateOne({ _id: productID }, {
+        //     $push: { likes: user._id }
+        // });
         return {    // Response like.
             status: StatusCodes.CREATED,
             data: {
@@ -95,7 +96,6 @@ async function checkExistProduct(id) {
 
 
 module.exports = {
-    LikeForBlogResolver,
-    LikeForProductResolver
+    bookmarkForBlogResolver,
 };
 
