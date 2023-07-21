@@ -43,6 +43,43 @@ const addProductToBasket = {
     },
 };
 
+const removeProductToBasket = {
+    type: ResponseType,
+    args: {
+        productID: { type: GraphQLString },    // String type
+    },
+    resolve: async (_, args, context) => {
+        const { req, res } = context;    // Get req and res from context.
+        const user = await verifyTokenGraphQl(req, res);    // Check user for authauthentication.
+        const { productID } = args;    // Get data from client.
+        const product = await checkExistProduct(productID);    // Check blog
+        if (product) {
+            await Basket.updateOne({ user: user._id, 'product.product': productID }, {
+                $inc: {
+                    'product.$.count': 1
+                }
+            });
+            return {    // Response like.
+                status: StatusCodes.OK,
+                data: {
+                    message: 'Basket find',
+                }
+            };
+        }
+        // await Basket.create({
+        //     user: user._id,
+        //     product: { product: productID, count: 1 },
+        // });
+        return {    // Response like.
+            status: StatusCodes.CREATED,
+            data: {
+                message: 'Basket',
+            }
+        };
+    },
+};
+
+
 
 
 
