@@ -42,7 +42,7 @@ const bookmarkForBlogResolver = {
 };
 
 
-const LikeForProductResolver = {
+const bookmarkForProductResolver = {
     type: ResponseType,
     args: {
         productID: { type: GraphQLString },    // String type
@@ -54,26 +54,27 @@ const LikeForProductResolver = {
         const product = await checkExistProduct(productID);    // Check product
 
 
-        // const getProduct = await Product.findOne({ _id: productID, likes: user._id });    // Getting a Product based on blog ID and user ID
-        // console.log('getProduct', getProduct);
-        // if (getProduct) {    // 
-        //     await Product.updateOne({ _id: productID }, {
-        //         $pull: { likes: user._id }
-        //     });
-        //     return {    // Response dislike.
-        //         status: StatusCodes.OK,
-        //         data: {
-        //             message: 'Dislike',
-        //         }
-        //     };
-        // }
-        // await Product.updateOne({ _id: productID }, {
-        //     $push: { likes: user._id }
-        // });
+        const getProduct = await Product.findOne({ _id: productID, bookMarks: user._id });    // Getting a Product based on blog ID and user ID
+
+
+        if (getProduct) {    // 
+            await Product.updateOne({ _id: productID }, {
+                $pull: { bookMarks: user._id }
+            });
+            return {    // Response dislike.
+                status: StatusCodes.OK,
+                data: {
+                    message: 'Bookmark removed',
+                }
+            };
+        }
+        await Product.updateOne({ _id: productID }, {
+            $push: { bookMarks: user._id }
+        });
         return {    // Response like.
             status: StatusCodes.CREATED,
             data: {
-                message: 'Like',
+                message: 'Bookmark added',
             }
         };
     },
@@ -97,5 +98,6 @@ async function checkExistProduct(id) {
 
 module.exports = {
     bookmarkForBlogResolver,
+    bookmarkForProductResolver
 };
 
