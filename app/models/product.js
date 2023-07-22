@@ -31,10 +31,10 @@ const Schema = new mongoose.Schema({
     features: { type: Features, default: [] },
 }, { toJSON: { virtuals: true } });
 
-Schema.virtual('imageUrl').get(function () {
-    return this.images.map(image => `${process.env.BASE_URL}${process.env.SERVER_PORT}/${image}`)
-    // return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
-})
+// Schema.virtual('imageUrl').get(function () {
+//     return this.images.map(image => `${process.env.BASE_URL}${process.env.SERVER_PORT}/${image}`)
+//     // return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
+// })
 Schema.index({ title: 'text', shortText: 'text', shortDescription: 'text', description: 'text' });
 
 Schema.virtual('CommentBlog', { ref: 'Comment', localField: '_id', foreignField: 'productID' });

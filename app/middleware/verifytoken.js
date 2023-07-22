@@ -54,7 +54,7 @@ async function verifyTokenGraphQl(req, res) {
                     },
                     {
                         path: 'basketUser',
-                        populate: [{path: 'product.product'}]
+                        // populate: [{ path: 'product.product' }]
                     }
                 ]);
                 if (!user) throw { status: 400, message: 2 };
@@ -66,8 +66,8 @@ async function verifyTokenGraphQl(req, res) {
         };
         throw { status: 400, message: 1 }
     } catch (error) {
-        if(error.message == 1) throw new Error('Token is not defind');
-        if(error.message == 2) throw new Error('There is no user');
+        if (error.message == 1) throw new Error('Token is not defind');
+        if (error.message == 2) throw new Error('There is no user');
         throw { status: 400, message: 'errrrrrrrrrrrrrrrrorr' }
     };
 };
