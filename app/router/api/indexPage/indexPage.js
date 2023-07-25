@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-
+const PaymentController = require('./../../../controller/api/homeController/paymentController');
 
 /**
  * @swagger
@@ -26,6 +26,7 @@ router.get('/', (req, res, next) => {
     return res.json('Main page');
 });
 
+router.post('/payment', PaymentController.payment)
 
 
 module.exports = { indexPage: router }

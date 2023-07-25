@@ -18,6 +18,7 @@ router.use('/admin', verifyToken, AdminRouter);
 // chckRole('ADMIN')
 router.use('/developer', developerRoute);
 
+
 // GraphQl route
 router.use('/graphql', graphqlHTTP(graphqlConfig));
 
