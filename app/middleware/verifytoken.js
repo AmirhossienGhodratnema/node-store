@@ -12,6 +12,10 @@ async function verifyToken(req, res, next) {
                 {
                     path: 'role',
                     populate: { path: 'permissions' }
+                },
+                {
+                    path: 'basketUser',
+                    populate: [{ path: 'product.product' }]
                 }
             ]);
             if (!user) throw { status: 400, message: 'There is no user' };

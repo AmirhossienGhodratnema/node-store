@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { verifyToken } = require('../../../middleware/verifytoken');
 const PaymentController = require('./../../../controller/api/homeController/paymentController');
 
 /**
@@ -26,7 +27,7 @@ router.get('/', (req, res, next) => {
     return res.json('Main page');
 });
 
-router.post('/payment', PaymentController.payment)
+router.post('/payment',verifyToken, PaymentController.payment)
 
 
 module.exports = { indexPage: router }
