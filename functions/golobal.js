@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const fs = require('fs');
 const { StatusCodes } = require('http-status-codes');
+const moment = require('jalali-moment');
 const path = require('path');
 const validator = require('validator');
 
@@ -111,6 +112,10 @@ async function getTimeOfCourse(chapters = []) {
     return (hour + ":" + minute + ":" + second)
 }
 
+async function invoiceNumberGenerator() {
+    return moment().format('jYYYYjMMjDDHHmmssSSS') + String()
+}
+
 module.exports = {
     unlinkPhoto,
     filesUpload,
@@ -122,5 +127,6 @@ module.exports = {
     uniqueTitle,
     getTimeOfCourse,
     checkMongoIdGraphQl,
-    createErrorGraphQl
+    createErrorGraphQl,
+    invoiceNumberGenerator
 };

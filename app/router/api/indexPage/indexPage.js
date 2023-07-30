@@ -28,6 +28,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/payment',verifyToken, PaymentController.payment)
+router.get('/verify', PaymentController.verify)
 
 
 module.exports = { indexPage: router }
