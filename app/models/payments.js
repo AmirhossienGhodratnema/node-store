@@ -8,6 +8,8 @@ const Schema = new mongoose.Schema({
     authority: { type: String },
     amount: { type: Number },
     description: { type: String, default: 'for shopping' },
+    refId: { type: String, default: undefined },
+    cardHash: { type: String, default: undefined },
 }, { timestamps: true });
 
 

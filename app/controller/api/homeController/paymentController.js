@@ -20,8 +20,7 @@ module.exports = new class HomeController extends Controller {
             const gatewayURL = 'https://www.zarinpal.com/pg/StartPay/'
             const zarinpallOption = {
                 merchant_id: '833ac752-a2a8-4bd8-9e55-165dfec57888',
-                amount: 10000,
-                // amount: payInfoBasket.Payable,
+                amount: payInfoBasket.Payable,
                 description,
                 callback_url: 'http://localhost:8000/api/v1/verify',
                 metadata: {
@@ -60,6 +59,7 @@ module.exports = new class HomeController extends Controller {
             const verifyUrl = 'https://api.zarinpal.com/pg/v4/payment/verify.json';
             const payment = await Payment.findOne({ authority: Authority, verify: false });
             if (!payment) await createError(StatusCodes.NOT_FOUND, 'There is no such payment');
+            if (payment.verify) await createError(StatusCodes.FORBIDDEN, 'There is no such payment');
             const verifyResult = await (await fetch(verifyUrl, {
                 method: 'post',
                 headers: {
@@ -68,42 +68,32 @@ module.exports = new class HomeController extends Controller {
                 body: JSON.stringify({
                     merchant_id: '833ac752-a2a8-4bd8-9e55-165dfec57888',
                     authority: Authority,
-                    amount: 10000,
+                    amount: payInfoBasket.Payable,
                 })
             })).json();
 
 
-            return res.json({
-                status: StatusCodes.INTERNAL_SERVER_ERROR,
-                success: false,
-                message: verifyResult,
-            });
+            if (verifyResult?.data?.code === 100) {
 
-            //  or
-            // const verify = await fetch(verifyUrl, {
-            //     method: 'post',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         authority: Authority,
-            //         amount: payment.amount,
-            //         merchant_id: '833ac752-a2a8-4bd8-9e55-165dfec57888'
-            //     })
-            // })).then(resutl => result.json())
-            // if (Authority && Status === 'OK') {
-            //     return res.json({
-            //         status: StatusCodes.CREATED,
-            //         success: true,
-            //         message: 'The payment operation was completed successfully',
-            //     });
-            // } else {
-            //     return res.json({
-            //         status: StatusCodes.INTERNAL_SERVER_ERROR,
-            //         success: false,
-            //         message: 'Payment operation failed',
-            //     });
-            // }
+                await Payment.updateOne({ authority: Authority }, {
+                    $set: {
+                        cardHash: verifyResult?.data?.card_hash,
+                        refId: verifyResult?.data?.ref_id,
+                    }
+                });
+
+                return res.json({
+                    status: StatusCodes.OK,
+                    success: true,
+                    message: 'The payment operation was completed successfully',
+                });
+            } else {
+                return res.json({
+                    status: StatusCodes.INTERNAL_SERVER_ERROR,
+                    success: false,
+                    message: 'Payment operation failed',
+                });
+            }
 
         } catch (error) {
             next(error);
