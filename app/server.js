@@ -1,5 +1,5 @@
 const cookieParser = require('cookie-parser');
-
+const path = require('path')
 // My require
 const { errorHandler, notFoundError } = require('./errors/errorHandlers');
 const { AllRoutesApi } = require('./router/api/router');
@@ -7,7 +7,10 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const cors = require('cors');
-
+const exoressEjsLayouts = require('express-ejs-layouts')
+const ejs = require('ejs');
+const expressEjsLayouts = require('express-ejs-layouts');
+const { AllRoutesWeb } = require('./router/web/router');
 module.exports = class Application {
 
     #express = require('express');    // Require express private.
@@ -18,6 +21,7 @@ module.exports = class Application {
         this.configDatabase(DB_URL);    // Configuration DB.
         this.innitRedis()
         this.confiApplication();    // Configuration application.
+        this.initTemplateEngin()
         this.createServer(PORT);    // Create server.
         this.createRoute();    // Create routes
         this.errorHandler();    // Error handlers.
@@ -27,13 +31,14 @@ module.exports = class Application {
     //  Server configuration
     confiApplication() {
         const path = require('path');
+        console.log(__dirname)
 
         // Opitons config.
         this.#app.use(cors());
-        this.#app.use(morgan('dev'));    // Loger
+        // this.#app.use(morgan('dev'));    // Loger
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
-        this.#app.use(this.#express.static(path.join(__dirname, '../public')));    // Set static files.
+        this.#app.use(this.#express.static(path.join(__dirname, 'public')));    // Set static files.
         this.#app.use(cookieParser(process.env.SECRET_KEY_COOKIE_PARSER));    // Set cookie-parser and secret-key. 
 
         // View engine config. 
@@ -98,7 +103,7 @@ module.exports = class Application {
     // Create route to web and api.
     createRoute() {
         this.#app.use(AllRoutesApi);    // Set api route.
-        // this.#app.use(AllRoutesWeb);    // Set api route.
+        this.#app.use(AllRoutesWeb);
     };
 
     // Error handler full.
@@ -109,6 +114,15 @@ module.exports = class Application {
 
     innitRedis() {
         require('./utils/init_redis');
+    };
+
+    initTemplateEngin() {
+        this.#app.use(expressEjsLayouts)    // Set layout for ejs.
+        this.#app.set('view engine', 'ejs')    // View engin config.
+        this.#app.set('views', path.join(__dirname, 'resource', 'views'))    // Views path.
+        this.#app.set('layout extractStyles', true)    // Style confin ejs.
+        this.#app.set('layout extractScripts', true)    // Script config ejs.
+        this.#app.set('layout', './layouts/master')    // Leyout confing for ejs.
     };
 };
 
