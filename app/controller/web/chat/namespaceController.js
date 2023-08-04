@@ -24,7 +24,7 @@ module.exports = new class NamespaceController extends Controller {
 
     async getAll(req, res, next) {
         try {
-            const namespace = await Conversation.find({}, { rooms: 0 });
+            const namespace = await Conversation.find({}, { rooms: 0 }).populate('room');
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
                 success: true,

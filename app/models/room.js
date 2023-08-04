@@ -7,10 +7,10 @@ const Messages = new mongoose.Schema({
 
 
 
-const Rooms = new mongoose.Schema({
-    nameSpace: {title: mongoose.Types.ObjectId, ref: 'Conversation'},
+const Schema = new mongoose.Schema({
+    nameSpace: {type: mongoose.Types.ObjectId, ref: 'Conversation'},
     name: { type: String },
-    descrioption: { type: String },
+    description: { type: String },
     image: { type: String },
     messages: { type: [Messages], default: [] },
 }, { timestamps: true, toJSON: { virtuals: true } });
@@ -18,5 +18,5 @@ const Rooms = new mongoose.Schema({
 
 
 module.exports = {
-    Rooms: mongoose.model('Rooms', Schema)
+    Room: mongoose.model('Room', Schema)
 }
