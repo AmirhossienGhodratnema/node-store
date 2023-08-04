@@ -6,7 +6,8 @@ function initialSocket(server) {
             origin: '*'
         }
     });
-}
+    return io;
+};
 
 module.exports = {
     initialSocket
