@@ -1,4 +1,5 @@
 const socket = io('http://localhost:8000');
+let nameSpaceSocket;
 
 function stringToHtml(string) {
     const parser = new DOMParser();
@@ -7,21 +8,16 @@ function stringToHtml(string) {
 }
 
 function initNameSpaceConnectoin(endpoint) {
-    const nameSpaceSocket = io(`http://localhost:8000/${endpoint}`)
-
-
+    nameSpaceSocket = io(`http://localhost:8000/${endpoint}`)
     nameSpaceSocket.on('roomList', rooms => {
+        getRoomInfo(rooms[0].name);
         const roomsElement = document.getElementById('contacts');
-        console.log(rooms)
         roomsElement.innerHTML = ''
         for (const room of rooms) {
-
-            // <img class="pic rogers"  src   />
-
             const html = stringToHtml(`
-            <div class="contact">
-                <div class="boxImageRoom">
-                    <img class=""pic rogers src="${room.imageUrl}" alt="Image not founed">
+            <div class="contact"  id="RoomName" roomName="${room.name}">
+                <div class="boxImageRoom" roomSelector=${room.name}>
+                    <img class="" src="${room.imageUrl}" alt="Image not founed">
                 </div>
 
                 <div class="infoRoom">
@@ -37,19 +33,39 @@ function initNameSpaceConnectoin(endpoint) {
                 </div>
           </div>
           `);
-
-            roomsElement.appendChild(html)
+            roomsElement.appendChild(html);
         }
+
+        const roomNodes = document.querySelectorAll('#RoomName');
+        for (const roomNode of roomNodes) {
+            roomNode.addEventListener('click', () => {
+                const roomName = roomNode.getAttribute('roomName');
+                getRoomInfo(roomName);
+            });
+        };
+
     });
 };
 
+function getRoomInfo(name) {
+    nameSpaceSocket.emit('joinRoom', name);
+    nameSpaceSocket.on('roomInfo', data => {
+        if (data) document.querySelectorAll('#nameSeen p.name')[0].innerText = data.name;
+    });
+    nameSpaceSocket.on('onlineUser', onlineUser => console.log('data', onlineUser));
+
+};
+
+let num = true;
 
 socket.on('connect', () => {
     socket.on('nameSpaceList', nameSpaceList => {
-
         const nameSpaceElement = document.getElementById('nameSpace');
-        nameSpaceElement.innerText = '';
-        initNameSpaceConnectoin(nameSpaceList[0].endpoint)
+        nameSpaceElement.innerHTML = '';
+        if (num) {
+            initNameSpaceConnectoin(nameSpaceList[0].endpoint);
+            num = false;
+        };
         for (const nameSpace of nameSpaceList) {
             const li = document.createElement('li');
             const p = document.createElement('p');

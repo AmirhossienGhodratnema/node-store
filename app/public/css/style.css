@@ -49,6 +49,10 @@ html {
   margin-bottom: 0.125rem;
 }
 
+.pStyle {
+  margin: 0;
+}
+
 .contact .message,
 .contact .seen {
   font-size: 0.9rem;
@@ -326,4 +330,9 @@ html {
 
 .infoRoom {
   margin-left: 1rem;
+}
+
+.nameSeen {
+  margin-left: 4.5rem;
+
 }
