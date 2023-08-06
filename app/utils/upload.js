@@ -8,7 +8,8 @@ function createPath(req) {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDay();
-    let dir = path.join(__dirname, '..', '..', 'public', 'uploads', year + '', month + '', day + '');
+    console
+    let dir = path.join(__dirname, '..', 'public', 'uploads', year + '', month + '', day + '');
     req.body.fileUploadPath = path.join('uploads', year + '', month + '', day + '')
     fs.mkdirSync(dir, { recursive: true });
     return dir;
@@ -22,8 +23,10 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
+
         const fileName = String(new Date().getTime() + ext);
         req.body.filename = fileName;
+
         cb(null, fileName);
     }
 });

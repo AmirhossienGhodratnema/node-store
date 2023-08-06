@@ -16,6 +16,9 @@ const Schema = new mongoose.Schema({
 }, { timestamps: true, toJSON: { virtuals: true } });
 
 
+Schema.virtual('imageUrl').get(function () {
+    return `${process.env.BASE_URL}${process.env.SERVER_PORT}/${this.image}`;
+})
 
 module.exports = {
     Room: mongoose.model('Room', Schema)

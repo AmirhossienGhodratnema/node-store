@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Red+Hat+Display:400,500,900&display=swap");
-body, html {
-  font-family: Red hat Display, sans-serif;
+
+body,
+html {
+  font-family: tahoma;
   font-weight: 400;
   line-height: 1.25em;
   letter-spacing: 0.025em;
@@ -26,24 +28,33 @@ body, html {
 .contact {
   position: relative;
   margin-bottom: 1rem;
-  padding-left: 5rem;
+  /* padding-left: 5rem; */
   height: 4.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
 }
+
 .contact .pic {
   position: absolute;
   left: 0;
 }
+
 .contact .name {
   font-weight: 500;
   margin-bottom: 0.125rem;
 }
-.contact .message, .contact .seen {
+
+.contact .message,
+.contact .seen {
   font-size: 0.9rem;
   color: #999;
 }
+
 .contact .badge {
   box-sizing: border-box;
   position: absolute;
@@ -54,12 +65,13 @@ body, html {
   padding-top: 0.125rem;
   border-radius: 1rem;
   top: 0;
-  left: 2.5rem;
-  background: #333;
+  left: 0;
+  background: #529dab;
   color: white;
 }
 
 .contacts {
+  overflow: scroll;
   position: absolute;
   top: 50%;
   left: 0;
@@ -74,21 +86,26 @@ body, html {
   box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 2rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
   transition: transform 500ms;
 }
+
 .contacts h2 {
   margin: 0.5rem 0 1.5rem 5rem;
 }
+
 .contacts .fa-bars {
   position: absolute;
   left: 2.25rem;
   color: #999;
   transition: color 200ms;
 }
+
 .contacts .fa-bars:hover {
   color: #666;
 }
+
 .contacts .contact:last-child {
   margin: 0;
 }
+
 .contacts:hover {
   transform: translate(-23rem, -50%);
 }
@@ -106,12 +123,14 @@ body, html {
   background: white;
   box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 0rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
 }
+
 .chat .contact.bar {
   flex-basis: 3.5rem;
   flex-shrink: 0;
   margin: 1rem;
   box-sizing: border-box;
 }
+
 .chat .messages {
   padding: 1rem;
   background: #F7F7F7;
@@ -119,6 +138,7 @@ body, html {
   overflow-y: auto;
   box-shadow: inset 0 2rem 2rem -2rem rgba(0, 0, 0, 0.05), inset 0 -2rem 2rem -2rem rgba(0, 0, 0, 0.05);
 }
+
 .chat .messages .time {
   font-size: 0.8rem;
   background: #EEE;
@@ -130,6 +150,7 @@ body, html {
   width: fit-content;
   margin: 0 auto;
 }
+
 .chat .messages .message {
   box-sizing: border-box;
   padding: 0.5rem 1rem;
@@ -143,12 +164,14 @@ body, html {
   max-width: 66%;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
 }
+
 .chat .messages .message.parker {
   margin: 1rem 1rem 1rem auto;
   border-radius: 1.125rem 1.125rem 0 1.125rem;
   background: #333;
   color: white;
 }
+
 .chat .messages .message .typing {
   display: inline-block;
   width: 0.8rem;
@@ -158,18 +181,22 @@ body, html {
   background: #ccc;
   border-radius: 50%;
 }
+
 .chat .messages .message .typing.typing-1 {
   -webkit-animation: typing 3s infinite;
-          animation: typing 3s infinite;
+  animation: typing 3s infinite;
 }
+
 .chat .messages .message .typing.typing-2 {
   -webkit-animation: typing 3s 250ms infinite;
-          animation: typing 3s 250ms infinite;
+  animation: typing 3s 250ms infinite;
 }
+
 .chat .messages .message .typing.typing-3 {
   -webkit-animation: typing 3s 500ms infinite;
-          animation: typing 3s 500ms infinite;
+  animation: typing 3s 500ms infinite;
 }
+
 .chat .input {
   box-sizing: border-box;
   flex-basis: 4rem;
@@ -178,6 +205,7 @@ body, html {
   align-items: center;
   padding: 0 0.5rem 0 1.5rem;
 }
+
 .chat .input i {
   font-size: 1.5rem;
   margin-right: 1rem;
@@ -185,9 +213,11 @@ body, html {
   cursor: pointer;
   transition: color 200ms;
 }
+
 .chat .input i:hover {
   color: #333;
 }
+
 .chat .input input {
   border: none;
   background-image: none;
@@ -201,15 +231,20 @@ body, html {
   font-weight: 400;
   letter-spacing: 0.025em;
 }
+
 .chat .input input:placeholder {
   color: #999;
 }
 
 @-webkit-keyframes typing {
-  0%, 75%, 100% {
+
+  0%,
+  75%,
+  100% {
     transform: translate(0, 0.25rem) scale(0.9);
     opacity: 0.5;
   }
+
   25% {
     transform: translate(0, -0.25rem) scale(1);
     opacity: 1;
@@ -217,15 +252,20 @@ body, html {
 }
 
 @keyframes typing {
-  0%, 75%, 100% {
+
+  0%,
+  75%,
+  100% {
     transform: translate(0, 0.25rem) scale(0.9);
     opacity: 0.5;
   }
+
   25% {
     transform: translate(0, -0.25rem) scale(1);
     opacity: 1;
   }
 }
+
 .pic.stark {
   background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/73/SMH_Mentor_6.png");
 }
@@ -244,4 +284,46 @@ body, html {
 
 .pic.rogers {
   background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png");
+}
+
+.nameSpace {
+  background-color: #ccc;
+  width: 20rem;
+  height: 98vh;
+  overflow: scroll;
+  position: fixed;
+  border-radius: 1rem;
+}
+
+.nameSpace ul {
+  list-style: none;
+  padding: 0 0 0 0;
+  direction: rtl;
+}
+
+.nameSpace ul li {
+  background-color: #999;
+  margin: .5rem .8rem;
+  border-radius: 1rem;
+}
+
+.nameSpace ul li p {
+  margin: 0;
+  padding: 1rem 1rem;
+}
+
+
+.boxImageRoom {
+  height: 4.5rem;
+}
+
+.boxImageRoom img {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 25rem;
+  border: 1px solid #6cc5c1;
+}
+
+.infoRoom {
+  margin-left: 1rem;
 }

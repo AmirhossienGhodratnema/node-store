@@ -33,14 +33,13 @@ module.exports = class Application {
     //  Server configuration
     confiApplication() {
         const path = require('path');
-        console.log(__dirname)
 
         // Opitons config.
         this.#app.use(cors());
         // this.#app.use(morgan('dev'));    // Loger
+        this.#app.use(this.#express.static(path.join(__dirname, 'public')));    // Set static files.
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
-        this.#app.use(this.#express.static(path.join(__dirname, 'public')));    // Set static files.
         this.#app.use(cookieParser(process.env.SECRET_KEY_COOKIE_PARSER));    // Set cookie-parser and secret-key. 
 
         // View engine config. 

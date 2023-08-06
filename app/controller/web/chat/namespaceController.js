@@ -1,4 +1,4 @@
-const { createError } = require("../../../../functions/golobal");
+const { createError, ValidationData } = require("../../../../functions/golobal");
 const { Conversation } = require("../../../models/conversation");
 const Controller = require("../../controller");
 const { StatusCodes } = require("http-status-codes");
@@ -10,7 +10,7 @@ module.exports = new class NamespaceController extends Controller {
     async create(req, res, next) {
         try {
             const { title, endpoint } = req.body;
-            await this.checkNameSpace(title);
+            await ValidationData(req)
             const conversation = await Conversation.create({ title, endpoint });
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED,
@@ -24,7 +24,7 @@ module.exports = new class NamespaceController extends Controller {
 
     async getAll(req, res, next) {
         try {
-            const namespace = await Conversation.find({}, { rooms: 0 }).populate('room');
+            const namespace = await Conversation.find({}, { rooms: 0 }).sort({createdAt : -1}).populate('room');
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
                 success: true,
@@ -39,7 +39,12 @@ module.exports = new class NamespaceController extends Controller {
     // ------------------- Options -------------------
     async checkNameSpace(title) {
         const result = await Conversation.findOne({ title });
-        console.log(result)
         if (result) await createError(StatusCodes.BAD_REQUEST, 'Title is dublicate');
-    }
+    };
+
+    async checkNameSpaceEndpoint(endpoint) {
+        const result = await Conversation.findOne({ endpoint });
+        console.log('result', result)
+        if (result) await createError(StatusCodes.BAD_REQUEST, 'Endpoint is dublicate');
+    };
 };
