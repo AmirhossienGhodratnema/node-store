@@ -133,6 +133,7 @@ html {
   flex-shrink: 0;
   margin: 1rem;
   box-sizing: border-box;
+  justify-content: space-between;
 }
 
 .chat .messages {
@@ -334,5 +335,9 @@ html {
 
 .nameSeen {
   margin-left: 4.5rem;
-
+  display: flex;
+  align-items: center;
+}
+.onUser {
+  float: left;
 }

@@ -8,6 +8,7 @@ function stringToHtml(string) {
 }
 
 function initNameSpaceConnectoin(endpoint) {
+    if (nameSpaceSocket) nameSpaceSocket.close();
     nameSpaceSocket = io(`http://localhost:8000/${endpoint}`)
     nameSpaceSocket.on('roomList', rooms => {
         getRoomInfo(rooms[0].name);
@@ -52,7 +53,11 @@ function getRoomInfo(name) {
     nameSpaceSocket.on('roomInfo', data => {
         if (data) document.querySelectorAll('#nameSeen p.name')[0].innerText = data.name;
     });
-    nameSpaceSocket.on('onlineUser', onlineUser => console.log('data', onlineUser));
+    nameSpaceSocket.on('onlineUser', onlineUser => {
+        const onlineUserElement = document.getElementById('onlineUser');
+        onlineUserElement.textContent = onlineUser;
+        console.log('onlineUserElement', onlineUserElement);
+    });
 
 };
 
