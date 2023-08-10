@@ -20,15 +20,25 @@ module.exports = class NameSpaceSocketHandler {
         for (const nameSpace of nameSpaces) {
             this.#io.of(`/${nameSpace.endpoint}`).on('connection', async (socket) => {
                 socket.emit('roomList', nameSpace.room);
-                socket.on('joinRoom', roomName => {
+                socket.on('joinRoom', async roomName => {
                     const lastRoom = Array.from(socket.rooms)[1];
                     if (lastRoom) socket.leave(lastRoom);
                     socket.join(roomName);
-                    const roomInfo = nameSpace.room.find(item => item.name == roomName );
+                    await this.getOnlineUser(nameSpace.endpoint, roomName);
+                    const roomInfo = nameSpace.room.find(item => item.name == roomName);
                     socket.emit('roomInfo', roomInfo);
+                    socket.on('disconnect', async () => {
+                        await this.getOnlineUser(nameSpace.endpoint, roomName);
+                    });
                 });
             });
         };
+    };
+
+
+    async getOnlineUser(endpoint, roomName) {
+        const onlineUser = await this.#io.of(`${endpoint}`).in(`${roomName}`).allSockets();
+        this.#io.of(`${endpoint}`).in(`${roomName}`).emit('onlineUser', Array.from(onlineUser).length);
     };
 
 

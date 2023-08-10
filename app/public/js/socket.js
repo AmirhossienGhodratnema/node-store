@@ -20,7 +20,7 @@ function initNameSpaceConnection(endpoint) {
                 <div class="row sideBar-body contactElement" roomName="${room.name}">
                         <div class="col-sm-3 col-xs-3 sideBar-avatar">
                             <div class="avatar-icon">
-                                <img src="${room.imageUrl}">
+                                <img class="imageRoom" src="${room.imageUrl}">
                             </div>
                         </div>
                         <div class="col-sm-9 col-xs-9 sideBar-main">
@@ -52,6 +52,7 @@ function getRoomInfo(roomName) {
     nameSpaceSocket.on('roomInfo', roomInfo => {
          document.getElementById('roomNameSingle').innerHTML = roomInfo.name;
     });
+    nameSpaceSocket.on('onlineUser', onlineUser => console.log(onlineUser));
 };
 
 let check = false;
