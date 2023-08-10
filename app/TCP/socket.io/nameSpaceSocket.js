@@ -9,10 +9,27 @@ module.exports = class NameSpaceSocketHandler {
 
     initConnection() {
         this.#io.on('connection', async (socket) => {
-            const nameSpace = await Conversation.find({}, { title: 1, endpoint: 1 }).populate('room');
-            socket.emit('nameSpaceList', nameSpace);
-        })
-    }
+            const nameSpaces = await Conversation.find({}, { title: 1, endpoint: 1 }).populate('room');
+            socket.emit('nameSpaceList', nameSpaces);
+        });
+    };
+
+
+    async createNameSpaceConnection() {
+        const nameSpaces = await Conversation.find({}, { endpoint: 1 }).populate('room');
+        for (const nameSpace of nameSpaces) {
+            this.#io.of(`/${nameSpace.endpoint}`).on('connection', async (socket) => {
+                socket.emit('roomList', nameSpace.room);
+                socket.on('joinRoom', roomName => {
+                    const lastRoom = Array.from(socket.rooms)[1];
+                    if (lastRoom) socket.leave(lastRoom);
+                    socket.join(roomName);
+                    const roomInfo = nameSpace.room.find(item => item.name == roomName );
+                    socket.emit('roomInfo', roomInfo);
+                });
+            });
+        };
+    };
 
 
     // initConnection() {
