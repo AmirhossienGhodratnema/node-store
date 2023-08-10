@@ -13,6 +13,7 @@ const expressEjsLayouts = require('express-ejs-layouts');
 const { AllRoutesWeb } = require('./router/web/router');
 const { initialSocket } = require('./TCP/socket.io/server');
 const { socketHandler } = require('./TCP/socket.io');
+
 module.exports = class Application {
 
     #express = require('express');    // Require express private.
@@ -75,7 +76,7 @@ module.exports = class Application {
     createServer(PORT) {
         const http = require('http');
         const server = http.createServer(this.#app);    // Create server.
-        const io = initialSocket(server)
+        const io = initialSocket(server);
         socketHandler(io);
         server.listen(PORT, console.log(`Server: Running server on port ${PORT}...`.cyan.bold.italic))    // Runnin server.
     };
