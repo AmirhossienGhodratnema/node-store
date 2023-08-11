@@ -1,4 +1,3 @@
-
 <div class="nameSpacess">
   <ul id="nameSpace">
 
@@ -275,62 +274,34 @@
           </a>
           <span class="heading-online">Online</span>
         </div>
-        <div class="col-sm-1 col-xs-1  heading-dot pull-right">
+        <div class="col-sm-1 col-xs-1  heading-dot pull-right onlineUserBox">
           <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+          <p id="onlineUserRoom"></p>
         </div>
       </div>
 
-      <div class="row message" id="conversation">
-        <div class="row message-previous">
-          <div class="col-sm-12 previous">
-            <a onclick="previous(this)" id="ankitjain28" name="20">
-              Show Previous Message!
-            </a>
+      <div class="row message">
+        <div class="messageBox" id="messageBox">
+          <ul class="ulMessageBox">
+            <!-- <li><p>امیرحسین</p></li>
+            <li class="other"><p>امیرحسین</p></li> -->
+          </ul>
+        </div>
+        <div class="row reply">
+          <div class="col-sm-1 col-xs-1 reply-emojis">
+            <i class="fa fa-smile-o fa-2x"></i>
           </div>
-        </div>
-
-        <div class="row message-body">
-          <div class="col-sm-12 message-main-receiver">
-            <div class="receiver">
-              <div class="message-text">
-                Hi, what are you doing?!
-              </div>
-              <span class="message-time pull-right">
-                Sun
-              </span>
-            </div>
+          <div class="col-sm-9 col-xs-9 reply-main">
+            <!-- <textarea class="form-control" rows="1" id="comment"></textarea> -->
+            <input class="form-control" type="text" id="comment" placeholder="Typing message`">
           </div>
-        </div>
-
-        <div class="row message-body">
-          <div class="col-sm-12 message-main-sender">
-            <div class="sender">
-              <div class="message-text">
-                I am doing nothing man!
-              </div>
-              <span class="message-time pull-right">
-                Sun
-              </span>
-            </div>
+          <div class="col-sm-1 col-xs-1 reply-recording">
+            <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
           </div>
-        </div>
-      </div>
-
-      <div class="row reply">
-        <div class="col-sm-1 col-xs-1 reply-emojis">
-          <i class="fa fa-smile-o fa-2x"></i>
-        </div>
-        <div class="col-sm-9 col-xs-9 reply-main">
-          <!-- <textarea class="form-control" rows="1" id="comment"></textarea> -->
-          <input class="form-control" type="text" id="comment">
-        </div>
-        <div class="col-sm-1 col-xs-1 reply-recording">
-          <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
-        </div>
-        <div class="col-sm-1 col-xs-1 reply-send">
-          <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+          <div class="col-sm-1 col-xs-1 reply-send">
+            <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
