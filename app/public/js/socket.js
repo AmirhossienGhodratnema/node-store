@@ -8,6 +8,8 @@ function stringToHtml(str) {
     return doc.body.firstChild;
 };
 
+
+
 function initNameSpaceConnection(endpoint) {
     if (nameSpaceSocket) nameSpaceSocket.close();
     nameSpaceSocket = io(`http://localhost:8000/${endpoint}`);
@@ -50,10 +52,22 @@ function initNameSpaceConnection(endpoint) {
 function getRoomInfo(roomName) {
     nameSpaceSocket.emit('joinRoom', roomName);
     nameSpaceSocket.on('roomInfo', roomInfo => {
-         document.getElementById('roomNameSingle').innerHTML = roomInfo.name;
+        document.getElementById('roomNameSingle').innerHTML = roomInfo.name;
     });
-    nameSpaceSocket.on('onlineUser', onlineUser => console.log(onlineUser));
+    nameSpaceSocket.on('onlineUser', onlineUser => {
+        const onlineUserElement = document.getElementById('onlineUserRoom');
+        onlineUserElement.innerText = `On:${onlineUser}`
+    });
+
 };
+
+window.addEventListener('keydown', (e) => {
+    if (e.code == 'Enter') {
+        sendMessage()
+        return
+    }
+})
+
 
 let check = false;
 socket.on('connect', () => {
@@ -82,9 +96,24 @@ socket.on('connect', () => {
                 initNameSpaceConnection(endpointElement);
             });
         };
-
     });
+
 });
+
+
+function sendMessage() {
+    const inputMessage = document.getElementById('comment').value;
+    nameSpaceSocket.emit('message', inputMessage);
+    nameSpaceSocket.on('getMessage', data =>{
+        console.log(data)
+    });
+    const conversationElement = document.querySelector('#messageBox ul.ulMessageBox')
+    const html = stringToHtml(`
+        <li><p>${inputMessage}</p></li>
+    `);
+    conversationElement.appendChild(html);
+    document.getElementById('comment').value = '';
+};
 
 
 
