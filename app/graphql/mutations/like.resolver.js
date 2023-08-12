@@ -54,7 +54,6 @@ const LikeForProductResolver = {
 
 
         const getProduct = await Product.findOne({ _id: productID, likes: user._id });    // Getting a Product based on blog ID and user ID
-        console.log('getProduct', getProduct);
         if (getProduct) {    // 
             await Product.updateOne({ _id: productID }, {
                 $pull: { likes: user._id }

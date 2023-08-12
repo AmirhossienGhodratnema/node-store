@@ -18,18 +18,22 @@ module.exports = class NameSpaceSocketHandler {
 
     async createNameSpaceConnection() {
         const nameSpaces = await Conversation.find({}, { endpoint: 1 }).populate('room');
+
         for (const nameSpace of nameSpaces) {
+
             this.#io.of(`/${nameSpace.endpoint}`).on('connection', async (socket) => {
+                await this.getNewMessage(socket);
                 socket.emit('roomList', nameSpace.room);
                 socket.on('joinRoom', async roomName => {
-                    const lastRoom = Array.from(socket.rooms)[1];
-                    if (lastRoom) socket.leave(lastRoom);
-                    socket.join(roomName);
+                    const lastRoom = await Array.from(socket.rooms)[1];
+                    if (lastRoom) {
+                        socket.leave(lastRoom);
+                    }
+                    await socket.join(roomName);
                     await this.getOnlineUser(nameSpace.endpoint, roomName);
-                    const roomInfo = nameSpace.room.find(item => item.name == roomName);
-                    socket.emit('roomInfo', roomInfo);
-                    await this.getNewMessage(socket);
-                    socket.on('disconnect', async () => {
+                    const roomInfo = await nameSpace.room.find(item => item.name == roomName);
+                    await socket.emit('roomInfo', roomInfo);
+                    await socket.on('disconnect', async () => {
                         await this.getOnlineUser(nameSpace.endpoint, roomName);
                     });
                 });
@@ -46,11 +50,12 @@ module.exports = class NameSpaceSocketHandler {
 
     async getNewMessage(socket) {
         socket.on('newMessage', async data => {
-            const { message, endpoint, roomName } = data;
+            console.log('data', data)
+            const { message, roomName, sender } = data;
             await Room.updateOne({ name: roomName }, {
                 $push: {
                     messages: {
-                        sender: '648ad6278ee79051cb959061',
+                        sender,
                         message
                     }
                 }

@@ -17,7 +17,6 @@ const bookmarkForBlogResolver = {
         const { blogID } = args;    // Get data from client.
         const blog = await checkExistBlog(blogID);    // Check blog
         const getBlog = await Blog.findOne({ _id: blogID, bookMarks: user._id });    // Getting a blog based on blog ID and user ID
-        console.log('getBlog', getBlog)
         if (getBlog) {    // 
             await Blog.updateOne({ _id: blogID, bookMarks: user._id }, {
                 $pull: { bookMarks: user._id }

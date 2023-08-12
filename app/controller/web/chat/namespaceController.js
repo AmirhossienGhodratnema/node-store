@@ -44,7 +44,6 @@ module.exports = new class NamespaceController extends Controller {
 
     async checkNameSpaceEndpoint(endpoint) {
         const result = await Conversation.findOne({ endpoint });
-        console.log('result', result)
         if (result) await createError(StatusCodes.BAD_REQUEST, 'Endpoint is dublicate');
     };
 };

@@ -16,12 +16,15 @@
         <div class="row heading">
           <div class="col-sm-8 col-xs-8 heading-avatar">
             <div class="heading-avatar-icon profileMe">
-              <% if(user) {  %>
+              <% if(user.firstName && user.lastName) {  %>
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
                 <p><%= user.firstName%> <%= user.lastName %></p>
-              <% } else { %>
-                <p>Please login...</p>
+              <% } else if(user.userName) { %>
+                <p><%= user.userName%></p>
+                <% } else {%>
+                  <p><%= user.phone%></p>
               <% } %>
+              <input type="hidden" id="userId" value="<%= user._id %>">
             </div>
           </div>
           <div class="col-sm-1 col-xs-1  heading-dot  pull-right">

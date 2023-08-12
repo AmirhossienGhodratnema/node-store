@@ -1,3 +1,4 @@
+
 const socket = io('http://localhost:8000');
 let nameSpaceSocket;
 
@@ -9,12 +10,11 @@ function stringToHtml(str) {
 };
 
 
-
 function initNameSpaceConnection(endpoint) {
     if (nameSpaceSocket) nameSpaceSocket.close();
     nameSpaceSocket = io(`http://localhost:8000/${endpoint}`);
     nameSpaceSocket.on('roomList', roomList => {
-        getRoomInfo(endpoint, roomList[0].name)
+        getRoomInfo(roomList[0].name)
         const roomListElement = document.getElementById('rooms');
         roomListElement.innerHTML = ''
         for (const room of roomList) {
@@ -43,24 +43,25 @@ function initNameSpaceConnection(endpoint) {
         for (const roomElement of roomElements) {
             roomElement.addEventListener('click', () => {
                 const roomName = roomElement.getAttribute('roomName');
-                getRoomInfo(endpoint, roomName);
+                getRoomInfo(roomName);
             });
         };
     });
 };
 
-function getRoomInfo(endpoint, roomName) {
+function getRoomInfo(roomName) {
+
     nameSpaceSocket.emit('joinRoom', roomName);
     nameSpaceSocket.on('roomInfo', roomInfo => {
         document.getElementById('roomNameSingle').innerHTML = roomInfo.name;
         document.getElementById('roomNameSingle').setAttribute('roomName', roomName);
-        document.getElementById('roomNameSingle').setAttribute('endpoint', endpoint);
     });
+
+
     nameSpaceSocket.on('onlineUser', onlineUser => {
         const onlineUserElement = document.getElementById('onlineUserRoom');
         onlineUserElement.innerText = `On:${onlineUser}`
     });
-
 };
 
 window.addEventListener('keydown', (e) => {
@@ -68,6 +69,7 @@ window.addEventListener('keydown', (e) => {
         sendMessage()
         return
     }
+
 })
 const btnSendMessage = document.getElementById('btnSendMessage');
 btnSendMessage.addEventListener('click', () => {
@@ -111,19 +113,13 @@ socket.on('connect', () => {
 
 function sendMessage() {
     const message = document.getElementById('comment').value;
-
     const roomName = document.getElementById('roomNameSingle').getAttribute('roomName');
-    const endpoint = document.getElementById('roomNameSingle').getAttribute('endpoint');
-
-
-    document.getElementById('roomNameSingle').setAttribute('endpoint', endpoint);
-
     if (message.trim() == '') return alert('Message is empty');
-    
+    const sender = document.getElementById('userId').value;
     nameSpaceSocket.emit('newMessage', {
         message,
         roomName,
-        endpoint
+        sender
     });
     nameSpaceSocket.on('getMessage', data => {
         console.log(data)

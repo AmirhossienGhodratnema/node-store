@@ -10,12 +10,9 @@ module.exports = new class HomeController extends Controller {
         try {
 
             const user = req.user;
-            console.log(user)
             if (user.basketUser.length == 0) await createError(StatusCodes.INTERNAL_SERVER_ERROR, 'The shopping cart is empty')
             const payInfoBasket = await sumPay(user.basketUser);
             const description = 'خرید بابت محصول تستی';
-            console.log('payInfoBasket', payInfoBasket)
-
             const zarinPalReqUrl = 'https://api.zarinpal.com/pg/v4/payment/request.json';
             const gatewayURL = 'https://www.zarinpal.com/pg/StartPay/'
             const zarinpallOption = {
@@ -41,7 +38,6 @@ module.exports = new class HomeController extends Controller {
                 invoiceNumber
             });
             if (resultData.data.code === 100 && resultData?.data?.authority) {
-                console.log('ok')
                 return res.json({
                     status: StatusCodes.OK,
                     Url: `${gatewayURL}${resultData.data.authority}`
@@ -105,8 +101,6 @@ const sumPay = async (basket) => {
     let priceProduct = []
     const basketUnArray = basket.map(async item => {
         return await item.product.map(async productIn => {
-            console.log(productIn.count)
-            console.log('productIn', productIn.product.price);
             await priceProduct.push({ title: productIn.product.title, price: productIn.product.price, count: productIn.count, totalPrice: (productIn.count * productIn.product.price) })
         })
     })

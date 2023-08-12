@@ -15,12 +15,6 @@ const checkRole = (requirePermission = []) => {    // A function that takes the 
             const hasPermission = allPermission.every(permission => {
                 return userPermissions.includes(permission)
             });
-
-            console.log('allPermission', allPermission)
-            console.log('userPermissions', userPermissions)
-
-            console.log('test',userPermissions.includes(PERMISSIONS.ALL))
-
             if (userPermissions.includes(PERMISSIONS.ALL)) return next()
             if (hasPermission) return next();    // Go on
             throw { status: 400, message: 'You do not have access to this address' };    // Address access restriction error

@@ -20,8 +20,6 @@ const addProductToBasket = {
         const product = await checkExistProduct(productID);    // Check blog
         // user: userID, 'product.product': productID
         const basket = await Basket.findOne({ 'product.product': productID });
-        console.log(product)
-        console.log(basket)
         if (product && basket) {
             await Basket.updateOne({ user: user._id, 'product.product': productID }, {
                 $inc: {
@@ -62,7 +60,6 @@ const removeProductToBasket = {
         const { productID } = args;    // Get data from client.
         const product = await checkExistProduct(productID);    // Check blog
         const basket = await getBasket(productID, user._id);
-        console.log(basket.product[0].count > 2)
         if (product && basket?.product[0]?.count > 1) {
             await Basket.updateOne({ user: user._id, 'product.product': productID }, {
                 $inc: {
