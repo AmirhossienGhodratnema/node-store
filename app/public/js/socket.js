@@ -14,7 +14,7 @@ function initNameSpaceConnection(endpoint) {
     if (nameSpaceSocket) nameSpaceSocket.close();
     nameSpaceSocket = io(`http://localhost:8000/${endpoint}`);
     nameSpaceSocket.on('roomList', roomList => {
-        getRoomInfo(roomList[0].name)
+        getRoomInfo(endpoint, roomList[0].name)
         const roomListElement = document.getElementById('rooms');
         roomListElement.innerHTML = ''
         for (const room of roomList) {
@@ -43,16 +43,18 @@ function initNameSpaceConnection(endpoint) {
         for (const roomElement of roomElements) {
             roomElement.addEventListener('click', () => {
                 const roomName = roomElement.getAttribute('roomName');
-                getRoomInfo(roomName);
+                getRoomInfo(endpoint, roomName);
             });
         };
     });
 };
 
-function getRoomInfo(roomName) {
+function getRoomInfo(endpoint, roomName) {
     nameSpaceSocket.emit('joinRoom', roomName);
     nameSpaceSocket.on('roomInfo', roomInfo => {
         document.getElementById('roomNameSingle').innerHTML = roomInfo.name;
+        document.getElementById('roomNameSingle').setAttribute('roomName', roomName);
+        document.getElementById('roomNameSingle').setAttribute('endpoint', endpoint);
     });
     nameSpaceSocket.on('onlineUser', onlineUser => {
         const onlineUserElement = document.getElementById('onlineUserRoom');
@@ -67,6 +69,11 @@ window.addEventListener('keydown', (e) => {
         return
     }
 })
+const btnSendMessage = document.getElementById('btnSendMessage');
+btnSendMessage.addEventListener('click', () => {
+    sendMessage()
+    return;
+});
 
 
 let check = false;
@@ -96,148 +103,36 @@ socket.on('connect', () => {
                 initNameSpaceConnection(endpointElement);
             });
         };
+
     });
 
 });
 
 
 function sendMessage() {
-    const inputMessage = document.getElementById('comment').value;
-    nameSpaceSocket.emit('message', inputMessage);
-    nameSpaceSocket.on('getMessage', data =>{
+    const message = document.getElementById('comment').value;
+
+    const roomName = document.getElementById('roomNameSingle').getAttribute('roomName');
+    const endpoint = document.getElementById('roomNameSingle').getAttribute('endpoint');
+
+
+    document.getElementById('roomNameSingle').setAttribute('endpoint', endpoint);
+
+    if (message.trim() == '') return alert('Message is empty');
+    
+    nameSpaceSocket.emit('newMessage', {
+        message,
+        roomName,
+        endpoint
+    });
+    nameSpaceSocket.on('getMessage', data => {
         console.log(data)
     });
-    const conversationElement = document.querySelector('#messageBox ul.ulMessageBox')
+    const conversationElement = document.querySelector('#messageBox ul.ulMessageBox');
     const html = stringToHtml(`
-        <li><p>${inputMessage}</p></li>
+        <li><p>${message}</p></li>
     `);
     conversationElement.appendChild(html);
     document.getElementById('comment').value = '';
+    document.querySelector('#messageBox').scrollTo(0, conversationElement.scrollHeight);
 };
-
-
-
-
-
-
-
-
-// const socket = io('http://localhost:8000');
-// let nameSpaceSocket;
-
-// function stringToHtml(string) {
-//     const parser = new DOMParser();
-//     const doc = parser.parseFromString(string, 'text/html');
-//     return doc.body.firstChild;
-// }
-
-// function initNameSpaceConnectoin(endpoint) {
-//     if (nameSpaceSocket) nameSpaceSocket.close();
-//     nameSpaceSocket = io(`http://localhost:8000/${endpoint}`)
-//     nameSpaceSocket.on('roomList', rooms => {
-//         getRoomInfo(rooms[0].name);
-//         const roomsElement = document.getElementById('contacts');
-//         roomsElement.innerHTML = ''
-//         for (const room of rooms) {
-//             const html = stringToHtml(`
-//             <div class="contact"  id="RoomName" roomName="${room.name}">
-//                 <div class="boxImageRoom" roomSelector=${room.name}>
-//                     <img class="" src="${room.imageUrl}" alt="Image not founed">
-//                 </div>
-
-//                 <div class="infoRoom">
-//                     <div class="badge">
-//                         14
-//                     </div>
-//                     <div class="name">
-//                         ${room.name}
-//                     </div>
-//                     <div class="message">
-//                         ${room.description}
-//                     </div>
-//                 </div>
-//           </div>
-//           `);
-//             roomsElement.appendChild(html);
-//         }
-
-//         const roomNodes = document.querySelectorAll('#RoomName');
-//         for (const roomNode of roomNodes) {
-//             roomNode.addEventListener('click', () => {
-//                 const roomName = roomNode.getAttribute('roomName');
-//                 getRoomInfo(roomName);
-//             });
-//         };
-
-//     });
-// };
-
-// function getRoomInfo(name) {
-//     nameSpaceSocket.emit('joinRoom', name);
-//     nameSpaceSocket.on('roomInfo', data => {
-//         if (data) document.querySelectorAll('#nameSeen p.name')[0].innerText = data.name;
-//     });
-//     nameSpaceSocket.on('onlineUser', onlineUser => {
-//         const onlineUserElement = document.getElementById('onlineUser');
-//         onlineUserElement.textContent = onlineUser;
-//     });
-//     window.addEventListener('keydown', (e) => {
-//         if (e.code == 'Enter'){
-//             return sendMessage();
-//         }
-//     })
-
-// };
-
-// function sendMessage() {
-//     let inputMessage = document.getElementById('inputMessage').value;
-
-//     nameSpaceSocket.emit('newMessage', inputMessage)
-//     const li = stringToHtml(`
-//         <li class="mMe">
-//             <p>
-//                ${inputMessage}
-//             </p>
-//         </li>`
-//     );
-
-//     document.querySelector('#chat ul.ulMessage').appendChild(li);
-//     inputMessage = document.getElementById('inputMessage').value = '';
-//     const messageElement = document.querySelector('#chat');
-//     console.log(messageElement.scrollHeight);
-//     messageElement.scrollTo(0 , messageElement.scrollHeight);
-
-// };
-
-// let num = true;
-
-// socket.on('connect', () => {
-//     socket.on('nameSpaceList', nameSpaceList => {
-//         const nameSpaceElement = document.getElementById('nameSpace');
-//         nameSpaceElement.innerHTML = '';
-//         if (num) {
-//             initNameSpaceConnectoin(nameSpaceList[0].endpoint);
-//             num = false;
-//         };
-//         for (const nameSpace of nameSpaceList) {
-//             const li = document.createElement('li');
-//             const p = document.createElement('p');
-//             p.setAttribute('class', 'nameSpaceTitle');
-//             p.setAttribute('endpoint', nameSpace.endpoint);
-//             p.innerText = nameSpace.title;
-//             li.appendChild(p);
-//             nameSpaceElement.appendChild(li);
-//         }
-//         const nameSpaceNodes = document.querySelectorAll('#nameSpace li p.nameSpaceTitle');
-//         for (const nameSpaceElement of nameSpaceNodes) {
-//             nameSpaceElement.addEventListener('click', (e) => {
-//                 const endpoint = nameSpaceElement.getAttribute('endpoint');
-//                 initNameSpaceConnectoin(endpoint)
-//             })
-//         }
-//     })
-
-// });
-
-
-

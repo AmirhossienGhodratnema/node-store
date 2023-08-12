@@ -13,6 +13,7 @@ const expressEjsLayouts = require('express-ejs-layouts');
 const { AllRoutesWeb } = require('./router/web/router');
 const { initialSocket } = require('./TCP/socket.io/server');
 const { socketHandler } = require('./TCP/socket.io');
+const session = require('express-session')
 
 module.exports = class Application {
 
@@ -42,7 +43,14 @@ module.exports = class Application {
         this.#app.use(this.#express.json())    // Json body-parser setting.
         this.#app.use(this.#express.urlencoded({ extended: true }));    // urlencoded body-parser setting.
         this.#app.use(cookieParser(process.env.SECRET_KEY_COOKIE_PARSER));    // Set cookie-parser and secret-key. 
-
+        this.#app.use(session({
+            secret: process.env.SECRET_KEY_COOKIE_PARSER,
+            resave:true,
+            saveUninitialized:true,
+            cookie: {
+                secure: true
+            }
+        }));
         // View engine config. 
         // this.#app.set('view engine', 'ejs');    // Set view engine,
         // this.#app.set('views', path.join(__dirname, 'views'));    // Set dir view file.

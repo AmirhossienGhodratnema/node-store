@@ -270,8 +270,8 @@
           </div>
         </div>
         <div class="col-sm-8 col-xs-7 heading-name">
-          <a class="heading-name-meta" id="roomNameSingle">
-          </a>
+          <h6 class="heading-name-meta" id="roomNameSingle">
+          </h6>
           <span class="heading-online">Online</span>
         </div>
         <div class="col-sm-1 col-xs-1  heading-dot pull-right onlineUserBox">
@@ -293,15 +293,16 @@
           </div>
           <div class="col-sm-9 col-xs-9 reply-main">
             <!-- <textarea class="form-control" rows="1" id="comment"></textarea> -->
-            <input class="form-control" type="text" id="comment" placeholder="Typing message`">
+            <input class="form-control" type="text" id="comment" placeholder="Typing message">
           </div>
           <div class="col-sm-1 col-xs-1 reply-recording">
             <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
           </div>
-          <div class="col-sm-1 col-xs-1 reply-send">
+          <div class="col-sm-1 col-xs-1 reply-send" id="btnSendMessage">
             <i class="fa fa-send fa-2x" aria-hidden="true"></i>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <script src="/js/socket.js"></script>
