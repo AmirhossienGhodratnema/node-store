@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/style.css">
+
 <div class="nameSpacess">
   <ul id="nameSpace">
 
@@ -12,9 +14,14 @@
     <div class="col-sm-4 side">
       <div class="side-one">
         <div class="row heading">
-          <div class="col-sm-3 col-xs-3 heading-avatar">
-            <div class="heading-avatar-icon">
-              <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+          <div class="col-sm-8 col-xs-8 heading-avatar">
+            <div class="heading-avatar-icon profileMe">
+              <% if(user) {  %>
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                <p><%= user.firstName%> <%= user.lastName %></p>
+              <% } else { %>
+                <p>Please login...</p>
+              <% } %>
             </div>
           </div>
           <div class="col-sm-1 col-xs-1  heading-dot  pull-right">

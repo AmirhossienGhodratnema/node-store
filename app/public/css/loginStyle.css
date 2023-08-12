@@ -1,0 +1,26 @@
+.loginBox {
+  height: 100vh;
+  background-color: #d8dbd7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formBox {
+  width: 50%;
+  height: 50vh;
+  background-color: aliceblue;
+  padding: .5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2rem;
+}
+
+.formBox form{
+  width: 80%;
+}
+
+.btnMy {
+  margin-top: 2rem;
+}

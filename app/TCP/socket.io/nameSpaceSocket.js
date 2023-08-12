@@ -29,7 +29,6 @@ module.exports = class NameSpaceSocketHandler {
                     const roomInfo = nameSpace.room.find(item => item.name == roomName);
                     socket.emit('roomInfo', roomInfo);
                     await this.getNewMessage(socket);
-                    console.log('Amirhossein')
                     socket.on('disconnect', async () => {
                         await this.getOnlineUser(nameSpace.endpoint, roomName);
                     });
@@ -47,7 +46,6 @@ module.exports = class NameSpaceSocketHandler {
 
     async getNewMessage(socket) {
         socket.on('newMessage', async data => {
-            console.log(data)
             const { message, endpoint, roomName } = data;
             await Room.updateOne({ name: roomName }, {
                 $push: {

@@ -730,3 +730,13 @@ body {
   border-radius: 1rem 1rem  1rem 0 ;
   padding: 1rem 2rem;
 }
+
+.profileMe {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.profileMe p {
+  margin: 0 0 0 1rem;
+  font-weight: bold;
+}

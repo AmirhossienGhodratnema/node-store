@@ -1,4 +1,3 @@
-const cookieParser = require('cookie-parser');
 const path = require('path')
 // My require
 const { errorHandler, notFoundError } = require('./errors/errorHandlers');
@@ -14,6 +13,9 @@ const { AllRoutesWeb } = require('./router/web/router');
 const { initialSocket } = require('./TCP/socket.io/server');
 const { socketHandler } = require('./TCP/socket.io');
 const session = require('express-session')
+const cookieParser = require('cookie-parser');
+const { clientHelper } = require('./graphql/utils/clientHlper');
+
 
 module.exports = class Application {
 
@@ -45,8 +47,8 @@ module.exports = class Application {
         this.#app.use(cookieParser(process.env.SECRET_KEY_COOKIE_PARSER));    // Set cookie-parser and secret-key. 
         this.#app.use(session({
             secret: process.env.SECRET_KEY_COOKIE_PARSER,
-            resave:true,
-            saveUninitialized:true,
+            resave: true,
+            saveUninitialized: true,
             cookie: {
                 secure: true
             }
@@ -135,7 +137,12 @@ module.exports = class Application {
         this.#app.set('layout extractStyles', true)    // Style confin ejs.
         this.#app.set('layout extractScripts', true)    // Script config ejs.
         this.#app.set('layout', './layouts/master')    // Leyout confing for ejs.
+        this.#app.use((req, res, next) => {
+            this.#app.locals = clientHelper(req, res)
+            next();
+        });
     };
+
 };
 
 
