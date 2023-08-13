@@ -14,7 +14,7 @@ function initNameSpaceConnection(endpoint) {
     if (nameSpaceSocket) nameSpaceSocket.close();
     nameSpaceSocket = io(`http://localhost:8000/${endpoint}`);
     nameSpaceSocket.on('roomList', roomList => {
-        getRoomInfo(roomList[0].name)
+        getRoomInfo(endpoint, roomList[0].name)
         const roomListElement = document.getElementById('rooms');
         roomListElement.innerHTML = ''
         for (const room of roomList) {
@@ -43,18 +43,19 @@ function initNameSpaceConnection(endpoint) {
         for (const roomElement of roomElements) {
             roomElement.addEventListener('click', () => {
                 const roomName = roomElement.getAttribute('roomName');
-                getRoomInfo(roomName);
+                getRoomInfo(endpoint, roomName);
             });
         };
     });
 };
 
-function getRoomInfo(roomName) {
-
+function getRoomInfo(endpoint, roomName) {
+    console.log('endpoint', endpoint)
     nameSpaceSocket.emit('joinRoom', roomName);
     nameSpaceSocket.on('roomInfo', roomInfo => {
         document.getElementById('roomNameSingle').innerHTML = roomInfo.name;
         document.getElementById('roomNameSingle').setAttribute('roomName', roomName);
+        document.getElementById('roomNameSingle').setAttribute('endpoint', endpoint);
     });
 
 
@@ -114,21 +115,24 @@ socket.on('connect', () => {
 function sendMessage() {
     const message = document.getElementById('comment').value;
     const roomName = document.getElementById('roomNameSingle').getAttribute('roomName');
+    const endpoint = document.getElementById('roomNameSingle').getAttribute('endpoint');
+
     if (message.trim() == '') return alert('Message is empty');
     const sender = document.getElementById('userId').value;
     nameSpaceSocket.emit('newMessage', {
         message,
         roomName,
+        endpoint,
         sender
     });
-    nameSpaceSocket.on('getMessage', data => {
-        console.log(data)
-    });
     const conversationElement = document.querySelector('#messageBox ul.ulMessageBox');
-    const html = stringToHtml(`
-        <li><p>${message}</p></li>
-    `);
-    conversationElement.appendChild(html);
-    document.getElementById('comment').value = '';
-    document.querySelector('#messageBox').scrollTo(0, conversationElement.scrollHeight);
+    nameSpaceSocket.off('getMessage')
+    nameSpaceSocket.on('getMessage', data => {
+        const html = stringToHtml(`
+            <li class="${sender == data.sender ? '' : 'other'}"><p>${data.message}</p></li>
+        `);
+        conversationElement.appendChild(html);
+        document.getElementById('comment').value = '';
+        document.querySelector('#messageBox').scrollTo(0, conversationElement.scrollHeight);
+    });
 };

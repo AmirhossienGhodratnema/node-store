@@ -50,8 +50,8 @@ module.exports = class NameSpaceSocketHandler {
 
     async getNewMessage(socket) {
         socket.on('newMessage', async data => {
-            console.log('data', data)
-            const { message, roomName, sender } = data;
+            const { message, roomName, sender, endpoint } = data;
+            console.log('data', data);
             await Room.updateOne({ name: roomName }, {
                 $push: {
                     messages: {
@@ -60,6 +60,7 @@ module.exports = class NameSpaceSocketHandler {
                     }
                 }
             });
+            this.#io.of(`${endpoint}`).in(`${roomName}`).emit('getMessage', data)
         });
     };
 }
