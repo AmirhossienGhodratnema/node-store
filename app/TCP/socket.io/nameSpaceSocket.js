@@ -51,7 +51,6 @@ module.exports = class NameSpaceSocketHandler {
     async getNewMessage(socket) {
         socket.on('newMessage', async data => {
             const { message, roomName, sender, endpoint } = data;
-            console.log('data', data);
             await Room.updateOne({ name: roomName }, {
                 $push: {
                     messages: {
