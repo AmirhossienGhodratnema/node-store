@@ -15,6 +15,7 @@ const { socketHandler } = require('./TCP/socket.io');
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
 const { clientHelper } = require('./graphql/utils/clientHlper');
+const os = require('os');
 
 
 module.exports = class Application {
@@ -37,6 +38,7 @@ module.exports = class Application {
     //  Server configuration
     confiApplication() {
         const path = require('path');
+        
 
         // Opitons config.
         this.#app.use(cors());
